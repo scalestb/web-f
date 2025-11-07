@@ -133,17 +133,39 @@
     .moment.video:hover .play::before{ background: rgba(0,0,0,.6) }
 
     /* ====== LIGHTBOX ====== */
-    #lightbox[hidden]{ display:none }
-    #lightbox{ position:fixed; inset:0; display:grid; place-items:center; background: rgba(0,0,0,.72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 9999 }
-    #lightbox .lb-inner{ position:relative; width:min(96vw, 1080px); max-height:90vh; padding:16px; border-radius:16px; background: linear-gradient(180deg, color-mix(in oklab, var(--panel), white 6%), color-mix(in oklab, var(--panel-2), white 8%)); border:1px solid var(--line); box-shadow: var(--shadow) }
-    #lightbox .lb-close{ position:absolute; top:10px; right:12px; width:36px; height:36px; border-radius:10px; border:1px solid var(--line); background: rgba(255,255,255,.08); color:#fff; font-size:22px; display:grid; place-items:center; cursor:pointer }
-    #lightbox .lb-body{ display:grid; place-items:center }
-    #lb-img{ max-width:100%; max-height:80vh; border-radius:12px; display:none }
-    #lightbox.show-img #lb-img{ display:block }
-    .lb-video{ width:min(96vw,1080px); display:none }
-    #lightbox.show-video .lb-video{ display:block }
-    .lb-embed{ position:relative; width:100%; padding-bottom:56.25%; background:#000; border:1px solid var(--line); border-radius:12px; overflow:hidden }
-    .lb-embed iframe{ position:absolute; inset:0; width:100%; height:100%; border:0 }
+/* ====== LIGHTBOX (fix lệch iframe) ====== */
+#lightbox{ position:fixed; inset:0; display:grid; place-items:center; padding:10px;
+  background: rgba(0,0,0,.72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index:9999; }
+#lightbox[hidden]{ display:none }
+
+#lightbox .lb-inner{
+  position:relative; width:min(96vw,1080px); max-height:90vh; padding:16px;
+  border-radius:16px; background: linear-gradient(180deg, color-mix(in oklab, var(--panel), white 6%), color-mix(in oklab, var(--panel-2), white 8%));
+  border:1px solid var(--line); box-shadow: var(--shadow);
+}
+#lightbox .lb-body{ display:block }
+.lb-video{ width:100% }
+
+/* Dùng aspect-ratio để không bị lệch, bo góc đúng */
+.lb-embed{
+  position:relative; width:100%; aspect-ratio:16/9;
+  background:#000; border:1px solid var(--line); border-radius:12px; overflow:hidden;
+}
+/* Ép iframe fill khung, bỏ mọi width/height cứng */
+.lb-embed iframe{
+  position:absolute; inset:0; width:100%; height:100%; display:block; border:0;
+}
+
+#lb-img{ max-width:100%; max-height:80vh; border-radius:12px; display:none }
+#lightbox.show-img #lb-img{ display:block }
+.lb-video{ display:none }
+#lightbox.show-video .lb-video{ display:block }
+
+#lightbox .lb-close{
+  position:absolute; top:10px; right:12px; width:36px; height:36px;
+  border-radius:10px; border:1px solid var(--line); background: rgba(255,255,255,.08);
+  color:#fff; font-size:22px; display:grid; place-items:center; cursor:pointer;
+}
 
     /* ====== FOOTER ====== */
     footer{ text-align:center; color:var(--muted); padding: 26px 0 40px }
@@ -516,6 +538,51 @@
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
 })();
 </script>
+
+
+
+<script>
+(function(){
+  // 07:00 ngày 09/11/2025 theo giờ Việt Nam (+07:00)
+  const kickoff = new Date('2025-11-09T07:00:00+07:00');
+
+  const dEl = document.getElementById('cd-days');
+  const hEl = document.getElementById('cd-hours');
+  const mEl = document.getElementById('cd-min');
+  const sEl = document.getElementById('cd-sec');
+
+  function pad(n){ return String(n).padStart(2,'0'); }
+
+  function tick(){
+    const now = new Date();
+    let diff = kickoff - now;
+
+    if (diff <= 0){
+      dEl.textContent = '00';
+      hEl.textContent = '00';
+      mEl.textContent = '00';
+      sEl.textContent = '00';
+      clearInterval(tmr);
+      return;
+    }
+
+    const sec = Math.floor(diff/1000);
+    const days = Math.floor(sec/86400);
+    const hours = Math.floor((sec % 86400) / 3600);
+    const mins = Math.floor((sec % 3600) / 60);
+    const secs = sec % 60;
+
+    dEl.textContent = pad(days);
+    hEl.textContent = pad(hours);
+    mEl.textContent = pad(mins);
+    sEl.textContent = pad(secs);
+  }
+
+  tick(); // cập nhật ngay
+  const tmr = setInterval(tick, 1000);
+})();
+</script>
+
 
 
 </body>
