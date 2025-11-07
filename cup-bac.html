@@ -13,23 +13,14 @@
   <meta property="og:image" content="images/og-cover.jpg" />
 
   <style>
-    /* Thay :root cũ bằng block này */
+/* ========= THEME ========= */
 :root{
-  /* Nền xanh-đen sáng hơn */
-  --bg:#13305b;       /* trước: #0c1d44 */
-  --bg-2:#1b4a86;     /* trước: #12336b */
-
-  /* Panel sáng hơn chút để đồng bộ */
-  --panel:#12335a;    /* trước: #0f2144 */
-  --panel-2:#1a3f6f;  /* trước: #152a55 */
-
-  /* Giữ nguyên các token còn lại để không lệch tone toàn trang */
+  --bg:#13305b; --bg-2:#1b4a86;
+  --panel:#12335a; --panel-2:#1a3f6f;
   --glass: rgba(255,255,255,.10);
-  --txt:#e7efff;
-  --muted:#b8c8ea;
-  --line:rgba(255,255,255,.08);
+  --txt:#e7efff; --muted:#b8c8ea; --line:rgba(255,255,255,.08);
   --primary:#60a5fa; --accent:#22d3ee; --hot:#f472b6; --vs:#f43f5e;
-  --team-a:#22d3ee;  --team-b:#f59e0b;
+  --team-a:#22d3ee; --team-b:#f59e0b;
   --radius:18px; --radius-lg:28px;
   --shadow: 0 14px 40px rgba(0,0,0,.30);
   --shadow-soft: 0 6px 18px rgba(0,0,0,.18);
@@ -43,96 +34,102 @@
     radial-gradient(760px 300px at 90% 0%, rgba(34,211,238,.22), transparent 60%);
 }
 
+*{box-sizing:border-box}
+html,body{
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  color:var(--txt); line-height:1.55;
+  background:
+    radial-gradient(1300px 650px at 18% -10%, rgba(34,211,238,.18), transparent 60%),
+    radial-gradient(1000px 560px at 82% -12%, rgba(244,114,182,.16), transparent 62%),
+    linear-gradient(180deg,var(--bg),var(--bg-2));
+}
 
-    *{box-sizing:border-box}
-    html,body{
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      color:var(--txt); line-height:1.55;
-      background:
-        radial-gradient(1300px 650px at 18% -10%, rgba(34,211,238,.18), transparent 60%),
-        radial-gradient(1000px 560px at 82% -12%, rgba(244,114,182,.16), transparent 62%),
-        linear-gradient(180deg,var(--bg),var(--bg-2));
-    }
+.container{max-width:var(--maxw); margin:0 auto; padding: 24px 20px}
+.card{background:linear-gradient(180deg, color-mix(in oklab, var(--panel), white 4%), color-mix(in oklab, var(--panel-2), white 6%)); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); backdrop-filter: blur(10px) saturate(120%); -webkit-backdrop-filter: blur(10px) saturate(120%);}
+.subtle{color:var(--muted)}
 
-    .container{max-width:var(--maxw); margin:0 auto; padding: 24px 20px}
-    .card{background:linear-gradient(180deg, color-mix(in oklab, var(--panel), white 4%), color-mix(in oklab, var(--panel-2), white 6%)); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); backdrop-filter: blur(10px) saturate(120%); -webkit-backdrop-filter: blur(10px) saturate(120%);}
-    .subtle{color:var(--muted)}
+/* ====== HERO ====== */
+.hero{
+  position:relative; overflow:hidden; isolation:isolate;
+  padding: 42px 0 26px; margin-bottom: 8px;
+  background:
+    radial-gradient(820px 320px at 10% 0%, rgba(96,165,250,.18), transparent 60%),
+    radial-gradient(760px 300px at 90% 0%, rgba(34,211,238,.18), transparent 60%);
+}
+.hero .orbs{ position:absolute; inset:0; pointer-events:none; z-index:-1 }
+.orb{ position:absolute; filter: blur(52px); opacity:.72; border-radius:50%; }
+.orb.o1{ width:340px; height:340px; background:#1ed7ff44; top:-60px; left:-40px; animation: float 9s ease-in-out infinite }
+.orb.o2{ width:280px; height:280px; background:#ff4da644; top:-80px; right:-60px; animation: float 11s ease-in-out infinite reverse }
+@keyframes float{ 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(14px) } }
 
-    /* ====== HERO ====== */
-    .hero{
-      position:relative; overflow:hidden; isolation:isolate;
-      padding: 42px 0 26px; margin-bottom: 8px;
-      background:
-        radial-gradient(820px 320px at 10% 0%, rgba(96,165,250,.18), transparent 60%),
-        radial-gradient(760px 300px at 90% 0%, rgba(34,211,238,.18), transparent 60%);
-    }
-    .hero .orbs{ position:absolute; inset:0; pointer-events:none; z-index:-1 }
-    .orb{ position:absolute; filter: blur(52px); opacity:.72; border-radius:50%; }
-    .orb.o1{ width:340px; height:340px; background:#1ed7ff44; top:-60px; left:-40px; animation: float 9s ease-in-out infinite }
-    .orb.o2{ width:280px; height:280px; background:#ff4da644; top:-80px; right:-60px; animation: float 11s ease-in-out infinite reverse }
-    @keyframes float{ 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(14px) } }
+.title{
+  font-size: clamp(28px, 4.6vw, 52px); margin:0 0 10px; letter-spacing:.3px; font-weight:900;
+  background: conic-gradient(from 180deg at 50% 50%, var(--accent), #fff, var(--hot), var(--primary));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.hero-meta{ display:flex; flex-wrap:wrap; gap:10px; align-items:center }
+.chip{ display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius: 999px; background: rgba(255,255,255,.06); border:1px solid var(--line); font-weight:700; letter-spacing:.2px; backdrop-filter: blur(10px) saturate(120%); -webkit-backdrop-filter: blur(10px) saturate(120%);}
+.chip b{color:#fff}
 
-    .title{
-      font-size: clamp(28px, 4.6vw, 52px); margin:0 0 10px; letter-spacing:.3px; font-weight:900;
-      background: conic-gradient(from 180deg at 50% 50%, var(--accent), #fff, var(--hot), var(--primary));
-      -webkit-background-clip:text; background-clip:text; color:transparent;
-    }
-    .hero-meta{ display:flex; flex-wrap:wrap; gap:10px; align-items:center }
-    .chip{ display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius: 999px; background: rgba(255,255,255,.06); border:1px solid var(--line); font-weight:700; letter-spacing:.2px; backdrop-filter: blur(10px) saturate(120%); -webkit-backdrop-filter: blur(10px) saturate(120%);}
-    .chip b{color:#fff}
+/* Countdown */
+.countdown{ display:flex; gap:10px; margin-top:14px; }
+.cd{ display:grid; place-items:center; padding:10px 12px; min-width:72px; border-radius:14px; background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04)); border:1px solid var(--line); box-shadow:var(--shadow-soft); backdrop-filter: blur(10px) saturate(120%); -webkit-backdrop-filter: blur(10px) saturate(120%);}
+.cd b{ font-size: clamp(18px, 3.2vw, 28px) }
+.cd span{ font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.16em }
 
-    /* Countdown */
-    .countdown{ display:flex; gap:10px; margin-top:14px; }
-    .cd{ display:grid; place-items:center; padding:10px 12px; min-width:72px; border-radius:14px; background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04)); border:1px solid var(--line); box-shadow:var(--shadow-soft); backdrop-filter: blur(10px) saturate(120%); -webkit-backdrop-filter: blur(10px) saturate(120%);}
-    .cd b{ font-size: clamp(18px, 3.2vw, 28px) }
-    .cd span{ font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.16em }
+/* ====== VERSUS ====== */
+.versus{ margin-top: 18px }
+.vs-grid{ display:grid; gap:18px; grid-template-columns: 1fr 120px 1fr; align-items:stretch }
+@media (max-width: 900px){ .vs-grid{ grid-template-columns: 1fr; } }
 
-    /* ====== VERSUS ====== */
-    .versus{ margin-top: 18px }
-    /* VS nhỏ lại (cột giữa hẹp), poster to hơn (4:3) */
-    .vs-grid{ display:grid; gap:18px; grid-template-columns: 1fr 120px 1fr; align-items:stretch }
-    @media (max-width: 900px){ .vs-grid{ grid-template-columns: 1fr; } }
+.team-card{ position:relative; padding: 18px; overflow:hidden; border-radius: var(--radius); border: 1px solid var(--line); background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03)); box-shadow:var(--shadow-soft); backdrop-filter: blur(10px) saturate(120%); -webkit-backdrop-filter: blur(10px) saturate(120%); }
+.team-card::after{ content:""; position:absolute; inset:-40% -60% auto; height:140%; transform:rotate(12deg); background: radial-gradient(250px 100px at 50% 50%, rgba(255,255,255,.08), transparent 60%); pointer-events:none }
+.team-head{ display:flex; gap:12px; align-items:center; margin-bottom:12px }
+.team-logo{ width:68px; height:68px; border-radius:18px; object-fit:cover; border: 2px solid var(--line); box-shadow:var(--shadow-soft); background:#000 }
+.team-name{ font-size: clamp(18px, 2.8vw, 28px); margin:0; font-weight:900 }
+.team-tag{ font-size:13px; opacity:.85 }
+.poster{ aspect-ratio: 4/3; width:100%; border-radius: 14px; overflow:hidden; border:1px solid var(--line); background:#020617; box-shadow:var(--shadow-soft); backdrop-filter: blur(6px) saturate(115%); -webkit-backdrop-filter: blur(6px) saturate(115%);}
+.poster img{ width:100%; height:100%; object-fit:cover; display:block; transition: transform .35s ease }
+.poster:hover img{ transform: scale(1.03) }
 
-    .team-card{ position:relative; padding: 18px; overflow:hidden; border-radius: var(--radius); border: 1px solid var(--line); background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03)); box-shadow:var(--shadow-soft); backdrop-filter: blur(10px) saturate(120%); -webkit-backdrop-filter: blur(10px) saturate(120%); }
-    .team-card::after{ content:""; position:absolute; inset:-40% -60% auto; height:140%; transform:rotate(12deg); background: radial-gradient(250px 100px at 50% 50%, rgba(255,255,255,.08), transparent 60%); pointer-events:none }
-    .team-head{ display:flex; gap:12px; align-items:center; margin-bottom:12px }
-    .team-logo{ width:68px; height:68px; border-radius:18px; object-fit:cover; border: 2px solid var(--line); box-shadow:var(--shadow-soft); background:#000 }
-    .team-name{ font-size: clamp(18px, 2.8vw, 28px); margin:0; font-weight:900 }
-    .team-tag{ font-size:13px; opacity:.85 }
-    .poster{ aspect-ratio: 4/3; width:100%; border-radius: 14px; overflow:hidden; border:1px solid var(--line); background:#020617; box-shadow:var(--shadow-soft); backdrop-filter: blur(6px) saturate(115%); -webkit-backdrop-filter: blur(6px) saturate(115%);}
-    .poster img{ width:100%; height:100%; object-fit:cover; display:block; transition: transform .35s ease }
-    .poster:hover img{ transform: scale(1.03) }
+.vs-badge{ display:grid; place-items:center; padding: 12px 14px; border-radius: 16px; border:1px solid var(--line); background: linear-gradient(180deg, rgba(244,63,94,.22), rgba(244,63,94,.10)); box-shadow: var(--shadow); backdrop-filter: blur(10px) saturate(120%); -webkit-backdrop-filter: blur(10px) saturate(120%);}
+.vs-badge .txt{ font-size: clamp(28px, 4vw, 48px); font-weight: 1000; letter-spacing:1px; color:#fff; text-shadow: 0 8px 26px rgba(244,63,94,.45) }
 
-    .vs-badge{ display:grid; place-items:center; padding: 12px 14px; border-radius: 16px; border:1px solid var(--line); background: linear-gradient(180deg, rgba(244,63,94,.22), rgba(244,63,94,.10)); box-shadow: var(--shadow); backdrop-filter: blur(10px) saturate(120%); -webkit-backdrop-filter: blur(10px) saturate(120%);}
-    .vs-badge .txt{ font-size: clamp(28px, 4vw, 48px); font-weight: 1000; letter-spacing:1px; color:#fff; text-shadow: 0 8px 26px rgba(244,63,94,.45) }
-    /* .vs-badge .kickoff { removed } */
+.team-a .team-name{ color: var(--team-a) }
+.team-b .team-name{ color: var(--team-b) }
 
-    .team-a .team-name{ color: var(--team-a) }
-    .team-b .team-name{ color: var(--team-b) }
+/* ====== MOMENTS GRID ====== */
+.section{ margin-top: 28px }
+.section h2{ margin: 0 0 14px; font-size: clamp(20px, 3.4vw, 30px) }
+.row-title{ margin: 12px 0 10px; font-weight:900; letter-spacing:.02em }
 
-    /* ====== MOMENTS GRID (YouTube-like) ====== */
-    .section{ margin-top: 28px }
-    .section h2{ margin: 0 0 14px; font-size: clamp(20px, 3.4vw, 30px) }
-    .row-title{ margin: 12px 0 10px; font-weight:900; letter-spacing:.02em }
-    .gallery-4{ display:grid; gap:22px; grid-template-columns: repeat(4, 1fr) }
-    @media (max-width: 1100px){ .gallery-4{ grid-template-columns: repeat(3, 1fr) } }
-    @media (max-width: 760px){ .gallery-4{ grid-template-columns: repeat(2, 1fr) } }
-    @media (max-width: 520px){ .gallery-4{ grid-template-columns: 1fr } }
+/* Album link dưới row-title */
+.album-row{ margin: -4px 0 12px; }
+.album-link{
+  display:inline-flex; align-items:center; gap:8px; padding:8px 12px;
+  border-radius:999px; background: rgba(255,255,255,.06); border:1px solid var(--line);
+  text-decoration:none; color:#fff; font-weight:700; letter-spacing:.2px;
+}
+.album-link:hover{ background: rgba(255,255,255,.10); }
 
-    .moment{ position:relative; border:1px solid var(--line); border-radius: 16px; overflow:hidden; background: rgba(255,255,255,.04); box-shadow:var(--shadow-soft); backdrop-filter: blur(8px) saturate(115%); -webkit-backdrop-filter: blur(8px) saturate(115%); }
-    .moment .shot{ position:relative; aspect-ratio:4/3; width:100%; background:#0b1020; cursor: zoom-in } /* to hơn */
-    .moment img{ width:100%; height:100%; object-fit:cover; display:block; transition: transform .28s ease }
-    .moment:hover img{ transform: scale(1.03) }
-    .moment .cap{ position:absolute; left:8px; right:8px; bottom:8px; padding:6px 8px; border-radius:8px; font-size:12px; color:#e7efff; background: linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.30)); border:1px solid rgba(255,255,255,.12) }
+.gallery-4{ display:grid; gap:22px; grid-template-columns: repeat(4, 1fr) }
+@media (max-width: 1100px){ .gallery-4{ grid-template-columns: repeat(3, 1fr) } }
+@media (max-width: 760px){ .gallery-4{ grid-template-columns: repeat(2, 1fr) } }
+@media (max-width: 520px){ .gallery-4{ grid-template-columns: 1fr } }
 
-    /* Video thumb style (play overlay) */
-    .moment.video .shot{ cursor:pointer }
-    .moment.video .play{ position:absolute; inset:0; display:grid; place-items:center }
-    .moment.video .play::before{ content:""; width:68px; height:68px; border-radius:999px; background: rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.25); box-shadow: 0 8px 24px rgba(0,0,0,.35) }
-    .moment.video .play::after{ content:""; position:absolute; width:0; height:0; border-left:18px solid #fff; border-top:12px solid transparent; border-bottom:12px solid transparent; margin-left:3px }
-    .moment.video:hover .play::before{ background: rgba(0,0,0,.6) }
+.moment{ position:relative; border:1px solid var(--line); border-radius: 16px; overflow:hidden; background: rgba(255,255,255,.04); box-shadow:var(--shadow-soft); backdrop-filter: blur(8px) saturate(115%); -webkit-backdrop-filter: blur(8px) saturate(115%); }
+.moment .shot{ position:relative; aspect-ratio:4/3; width:100%; background:#0b1020; cursor: zoom-in }
+.moment img{ width:100%; height:100%; object-fit:cover; display:block; transition: transform .28s ease }
+.moment:hover img{ transform: scale(1.03) }
+.moment .cap{ position:absolute; left:8px; right:8px; bottom:8px; padding:6px 8px; border-radius:8px; font-size:12px; color:#e7efff; background: linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.30)); border:1px solid rgba(255,255,255,.12) }
 
-    /* ====== LIGHTBOX ====== */
+/* Video thumb style */
+.moment.video .shot{ cursor:pointer }
+.moment.video .play{ position:absolute; inset:0; display:grid; place-items:center }
+.moment.video .play::before{ content:""; width:68px; height:68px; border-radius:999px; background: rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.25); box-shadow: 0 8px 24px rgba(0,0,0,.35) }
+.moment.video .play::after{ content:""; position:absolute; width:0; height:0; border-left:18px solid #fff; border-top:12px solid transparent; border-bottom:12px solid transparent; margin-left:3px }
+.moment.video:hover .play::before{ background: rgba(0,0,0,.6) }
+
 /* ====== LIGHTBOX (fix lệch iframe) ====== */
 #lightbox{ position:fixed; inset:0; display:grid; place-items:center; padding:10px;
   background: rgba(0,0,0,.72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index:9999; }
@@ -146,12 +143,10 @@
 #lightbox .lb-body{ display:block }
 .lb-video{ width:100% }
 
-/* Dùng aspect-ratio để không bị lệch, bo góc đúng */
 .lb-embed{
   position:relative; width:100%; aspect-ratio:16/9;
   background:#000; border:1px solid var(--line); border-radius:12px; overflow:hidden;
 }
-/* Ép iframe fill khung, bỏ mọi width/height cứng */
 .lb-embed iframe{
   position:absolute; inset:0; width:100%; height:100%; display:block; border:0;
 }
@@ -167,19 +162,19 @@
   color:#fff; font-size:22px; display:grid; place-items:center; cursor:pointer;
 }
 
-    /* ====== FOOTER ====== */
-    footer{ text-align:center; color:var(--muted); padding: 26px 0 40px }
-    .mini{ font-size:12px }
+/* ====== FOOTER ====== */
+footer{ text-align:center; color:var(--muted); padding: 26px 0 40px }
+.mini{ font-size:12px }
 
-    /* Utility */
-    .card{ margin-top:12px }
-    .center{ text-align:center }
-    .mt8{ margin-top:8px } .mt14{ margin-top:14px } .mt20{ margin-top:20px }
+/* Utility */
+.card{ margin-top:12px }
+.center{ text-align:center }
+.mt8{ margin-top:8px } .mt14{ margin-top:14px } .mt20{ margin-top:20px }
 
-    @media (prefers-reduced-motion: reduce){
-      .orb{ animation:none }
-      .poster img{ transition:none }
-    }
+@media (prefers-reduced-motion: reduce){
+  .orb{ animation:none }
+  .poster img{ transition:none }
+}
   </style>
 </head>
 <body>
@@ -220,7 +215,6 @@
       <!-- VS BADGE -->
       <div class="vs-badge card">
         <div class="txt">VS</div>
-        <!-- kickoff removed -->
       </div>
 
       <!-- TEAM B -->
@@ -241,7 +235,11 @@
   <section class="section container card" aria-labelledby="road-title">
     <h2 id="road-title">Khoảnh khắc • Con đường đến trận chung kết</h2>
 
+    <!-- Row 1 -->
     <h3 class="row-title">Vòng bảng - Đối đầu KV Hồ Chí Minh (26/10/2025)</h3>
+    <p class="album-row">
+      <a class="album-link" href="https://drive.google.com/drive/folders/1fWS5ARtOd4-yv8IzRS1f2BCyT4gXhpZB?usp=drive_link" target="_blank" rel="noopener">📷 Mở album Google Drive</a>
+    </p>
     <div class="gallery-4">
       <figure class="moment" data-full="ass/cup-bac/vong-bang/a1.jpg">
         <div class="shot"><img src="ass/cup-bac/vong-bang/a1.jpg" alt="Vòng bảng – Trận 1" /></div>
@@ -255,27 +253,24 @@
         <div class="shot"><img src="ass/cup-bac/vong-bang/a3.jpg" alt="Vòng bảng – Trận 3" /></div>
         <figcaption class="cap">Cố gắng</figcaption>
       </figure>
-     
-      
 
-
-            <figure class="moment video">
-  <div class="shot">
-    <img src="ass/cup-bac/vong-bang/video.jpg" alt="Highlights" />
-    <span class="play" aria-hidden="true"></span>
-  </div>
-  <template class="embed">
-    <!-- Dán embed từ YouTube vào đây -->
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/oqXbnhlT46s?si=0Bz88Vrz0skseHrB" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-
-  </template>
-  <figcaption class="cap">Highlights knock-out</figcaption>
-</figure>
-
+      <figure class="moment video">
+        <div class="shot">
+          <img src="ass/cup-bac/vong-bang/video.jpg" alt="Highlights" />
+          <span class="play" aria-hidden="true"></span>
+        </div>
+        <template class="embed">
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/oqXbnhlT46s?si=0Bz88Vrz0skseHrB" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </template>
+        <figcaption class="cap">Highlights knock-out</figcaption>
+      </figure>
     </div>
 
+    <!-- Row 2 -->
     <h3 class="row-title">Vòng bảng - Đối đầu ISC (30/10/2025)</h3>
+    <p class="album-row">
+      <a class="album-link" href="https://drive.google.com/drive/folders/1VB95eKxmU8zKYXX_kgf9zOHexpgbJ5i2?usp=drive_link" target="_blank" rel="noopener">📷 Mở album Google Drive</a>
+    </p>
     <div class="gallery-4">
       <figure class="moment" data-full="ass/cup-bac/vong-bang/b1.jpg">
         <div class="shot"><img src="ass/cup-bac/vong-bang/b1.jpg" alt="Vòng bảng – Trận 1" /></div>
@@ -289,30 +284,24 @@
         <div class="shot"><img src="ass/cup-bac/vong-bang/b3.jpg" alt="Vòng bảng – Trận 3" /></div>
         <figcaption class="cap">Hậu phương</figcaption>
       </figure>
-      
-      
 
-            <figure class="moment video">
-  <div class="shot">
-    <img src="ass/cup-bac/vong-bang/video.jpg" alt="Highlights" />
-    <span class="play" aria-hidden="true"></span>
-  </div>
-  <template class="embed">
-    <!-- Dán embed từ YouTube vào đây -->
-    
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Q7Q5Chfi-pc?si=1TaOuSbTppdBU8gw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-
-
-  </template>
-  <figcaption class="cap">Highlights knock-out</figcaption>
-</figure>
-
-
-
+      <figure class="moment video">
+        <div class="shot">
+          <img src="ass/cup-bac/vong-bang/video.jpg" alt="Highlights" />
+          <span class="play" aria-hidden="true"></span>
+        </div>
+        <template class="embed">
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/Q7Q5Chfi-pc?si=1TaOuSbTppdBU8gw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </template>
+        <figcaption class="cap">Highlights knock-out</figcaption>
+      </figure>
     </div>
 
+    <!-- Row 3 -->
     <h3 class="row-title">Vòng bảng - Đối đầu SG10 (02/11/2025)</h3>
+    <p class="album-row">
+      <a class="album-link" href="https://drive.google.com/drive/folders/1KUYh19cv7EPcuM6xIKfyjEGhiwEy0M9G?usp=drive_link" target="_blank" rel="noopener">📷 Mở album Google Drive</a>
+    </p>
     <div class="gallery-4">
       <figure class="moment" data-full="ass/cup-bac/vong-bang/c1.jpg">
         <div class="shot"><img src="ass/cup-bac/vong-bang/c1.jpg" alt="Vòng bảng – Trận 1" /></div>
@@ -326,27 +315,24 @@
         <div class="shot"><img src="ass/cup-bac/vong-bang/c3.jpg" alt="Vòng bảng – Trận 3" /></div>
         <figcaption class="cap">Cản phá</figcaption>
       </figure>
-      
-      
-            <figure class="moment video">
-  <div class="shot">
-    <img src="ass/cup-bac/vong-bang/video.jpg" alt="Highlights" />
-    <span class="play" aria-hidden="true"></span>
-  </div>
-  <template class="embed">
-    <!-- Dán embed từ YouTube vào đây -->
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/1qieFA-ji00?si=819dmF1vFQ7xv5v0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-
-  </template>
-  <figcaption class="cap">Highlights knock-out</figcaption>
-</figure>
-
-
-
+      <figure class="moment video">
+        <div class="shot">
+          <img src="ass/cup-bac/vong-bang/video.jpg" alt="Highlights" />
+          <span class="play" aria-hidden="true"></span>
+        </div>
+        <template class="embed">
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/1qieFA-ji00?si=819dmF1vFQ7xv5v0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </template>
+        <figcaption class="cap">Highlights knock-out</figcaption>
+      </figure>
     </div>
 
+    <!-- Row 4 -->
     <h3 class="row-title">Vòng bảng - Đối đầu INF (04/11/2025)</h3>
+    <p class="album-row">
+      <a class="album-link" href="https://drive.google.com/drive/folders/1Ejez67x4q0eI_N9AnnXMoauTS-7j6vYa?usp=drive_link" target="_blank" rel="noopener">📷 Mở album Google Drive</a>
+    </p>
     <div class="gallery-4">
       <figure class="moment" data-full="ass/cup-bac/vong-bang/d1.jpg">
         <div class="shot"><img src="ass/cup-bac/vong-bang/d1.jpg" alt="Vòng bảng – Trận 1" /></div>
@@ -360,27 +346,24 @@
         <div class="shot"><img src="ass/cup-bac/vong-bang/d3.jpg" alt="Vòng bảng – Trận 3" /></div>
         <figcaption class="cap">Vững chắc</figcaption>
       </figure>
-      
-      
+
       <figure class="moment video">
-  <div class="shot">
-    <img src="ass/cup-bac/vong-bang/video.jpg" alt="Highlights" />
-    <span class="play" aria-hidden="true"></span>
-  </div>
-  <template class="embed">
-    <!-- Dán embed từ YouTube vào đây -->
-   <iframe width="560" height="315" src="https://www.youtube.com/embed/a_x2G9YV5No?si=6YLdBemJ9k1e9Ew9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-
-  </template>
-  <figcaption class="cap">Highlights knock-out</figcaption>
-</figure>
-
-
-
+        <div class="shot">
+          <img src="ass/cup-bac/vong-bang/video.jpg" alt="Highlights" />
+          <span class="play" aria-hidden="true"></span>
+        </div>
+        <template class="embed">
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/a_x2G9YV5No?si=6YLdBemJ9k1e9Ew9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </template>
+        <figcaption class="cap">Highlights knock-out</figcaption>
+      </figure>
     </div>
 
+    <!-- Row 5 -->
     <h3 class="row-title">Vòng knock-out - Đối đầu FPT Play (06/11/2025)</h3>
+    <p class="album-row">
+      <a class="album-link" href="https://drive.google.com/drive/folders/1YT4ICDyHMB6j1b1T0kGZHoPNUdWFsgsa?usp=drive_link" target="_blank" rel="noopener">📷 Mở album Google Drive</a>
+    </p>
     <div class="gallery-4">
       <figure class="moment" data-full="ass/cup-bac/vong-bang/e1.jpg">
         <div class="shot"><img src="ass/cup-bac/vong-bang/e1.jpg" alt="Tứ kết" /></div>
@@ -388,28 +371,23 @@
       </figure>
       <figure class="moment" data-full="ass/cup-bac/vong-bang/e2.jpg">
         <div class="shot"><img src="ass/cup-bac/vong-bang/e2.jpg" alt="Bán kết" /></div>
-        <figcaption class="cap">Ngược vòng</figcaption>
+        <figcaption class="cap">San bằng</figcaption>
       </figure>
       <figure class="moment" data-full="ass/cup-bac/vong-bang/e3.jpg">
         <div class="shot"><img src="ass/cup-bac/vong-bang/e3.jpg" alt="Khoảnh khắc nổi bật 1" /></div>
         <figcaption class="cap">Lật kèo</figcaption>
       </figure>
-      
-                  <figure class="moment video">
-  <div class="shot">
-    <img src="ass/cup-bac/vong-bang/video.jpg" alt="Highlights" />
-    <span class="play" aria-hidden="true"></span>
-  </div>
-  <template class="embed">
-    <!-- Dán embed từ YouTube vào đây -->
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/bsy0TNPUKj8?si=8SeOPQVq45uE71r8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-  </template>
-  <figcaption class="cap">Highlights knock-out</figcaption>
-</figure>
-      
-
-
+      <figure class="moment video">
+        <div class="shot">
+          <img src="ass/cup-bac/vong-bang/video.jpg" alt="Highlights" />
+          <span class="play" aria-hidden="true"></span>
+        </div>
+        <template class="embed">
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/bsy0TNPUKj8?si=8SeOPQVq45uE71r8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </template>
+        <figcaption class="cap">Highlights knock-out</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -417,21 +395,18 @@
     <div class="mini">© 2025 FTEL HCM OPEN • Đơn vị tổ chức: Ban Phong trào FTEL HCM • Địa điểm: Quốc Hưng Arena</div>
   </footer>
 
-
-  <!-- Lightbox viewer (giữ nguyên HTML & CSS của bạn) -->
-<div id="lightbox" aria-modal="true" role="dialog" hidden>
-  <div class="lb-inner">
-    <button class="lb-close" aria-label="Đóng">×</button>
-    <div class="lb-body">
-      <img id="lb-img" alt="" />
-      <div class="lb-video">
-        <!-- YT API sẽ gắn iframe vào chính thẻ này -->
-        <div id="lb-player" class="lb-embed"></div>
+  <!-- Lightbox -->
+  <div id="lightbox" aria-modal="true" role="dialog" hidden>
+    <div class="lb-inner">
+      <button class="lb-close" aria-label="Đóng">×</button>
+      <div class="lb-body">
+        <img id="lb-img" alt="" />
+        <div class="lb-video">
+          <div id="lb-player" class="lb-embed"></div>
+        </div>
       </div>
     </div>
   </div>
-</div>
-
 
 <script>
 (function(){
@@ -448,13 +423,10 @@
     return (+(m[1]||0))*3600 + (+(m[2]||0))*60 + (+(m[3]||0));
   }
 
-  // Nhận: iframe HTML, URL YouTube, hoặc chỉ ID -> trả về HTML <iframe> nhúng
   function toEmbedHTML(input){
     if (!input) return '';
-    // Nếu đã là iframe HTML -> dùng nguyên xi
     if (/<\s*iframe[\s>]/i.test(input)) return input.trim();
 
-    // URL/ID -> convert sang /embed
     let id = '', start = 0;
     try{
       if (!/^(https?:)?\/\//.test(input)){
@@ -492,7 +464,7 @@
   function openEmbed(input){
     const html = toEmbedHTML(input);
     if (!html) return;
-    lbPlayer.innerHTML = html;              // gắn iframe
+    lbPlayer.innerHTML = html;
     lb.classList.remove('show-img');
     lb.classList.add('show-video');
     lb.removeAttribute('hidden');
@@ -502,27 +474,22 @@
     lb.setAttribute('hidden','');
     lb.classList.remove('show-img','show-video');
     lbImg.src = '';
-    lbPlayer.innerHTML = '';                // xoá iframe để dừng video
+    lbPlayer.innerHTML = '';
   }
 
-  // Click từng "moment"
   document.querySelectorAll('.moment .shot').forEach(el => {
     el.addEventListener('click', () => {
       const fig = el.closest('.moment');
       if (!fig) return;
 
       if (fig.classList.contains('video')){
-        // Ưu tiên <template class="embed"><iframe ...></iframe></template>
         const tpl = fig.querySelector('template.embed');
         if (tpl){
           const raw = (tpl.innerHTML && tpl.innerHTML.trim()) || (tpl.textContent && tpl.textContent.trim()) || '';
           if (raw) return openEmbed(raw);
         }
-        // Nếu không có template: lấy từ data-embed hoặc data-yt (URL/ID)
         const input = fig.getAttribute('data-embed') || fig.getAttribute('data-yt') || '';
         if (input) return openEmbed(input);
-
-        // Fallback: thẻ <a href="https://youtube...">
         const a = fig.querySelector('a[href*="youtu"]');
         if (a) return openEmbed(a.getAttribute('href'));
       }else{
@@ -538,8 +505,6 @@
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
 })();
 </script>
-
-
 
 <script>
 (function(){
@@ -578,12 +543,10 @@
     sEl.textContent = pad(secs);
   }
 
-  tick(); // cập nhật ngay
+  tick();
   const tmr = setInterval(tick, 1000);
 })();
 </script>
-
-
 
 </body>
 </html>
