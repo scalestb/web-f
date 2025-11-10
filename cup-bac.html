@@ -3,134 +3,156 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cúp Bạc – Chung kết FTEL HCM OPEN 2025</title>
-  <meta name="description" content="Landing page sự kiện Chung kết Cúp Bạc – FTEL HCM OPEN 2025, diễn ra lúc 07:00 ngày 09/11/2025 tại sân Quốc Hưng Arena." />
+  <title>Á quân Cúp Bạc – FTEL FOOTBALL 2025 (Sân 7) • Hi FPT</title>
+  <meta name="description" content="Trang kỷ niệm Hi FPT giành Á quân Cúp Bạc giải bóng đá sân 7 FTEL FOOTBALL 2025. Những khoảnh khắc đáng nhớ trong hành trình mùa giải." />
 
   <!-- Open Graph for sharing -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Cúp Bạc – Chung kết FTEL HCM OPEN 2025" />
-  <meta property="og:description" content="07:00 • 09/11/2025 • Quốc Hưng Arena" />
+  <meta property="og:title" content="Á quân Cúp Bạc – FTEL FOOTBALL 2025 • Hi FPT" />
+  <meta property="og:description" content="Sân 7 • Khép lại ngày 09/11/2025 • Những khoảnh khắc đáng nhớ." />
   <meta property="og:image" content="images/og-cover.jpg" />
 
   <style>
-/* ========= THEME ========= */
+/* ========= THEME (hoài cổ) ========= */
 :root{
-  --bg:#13305b; --bg-2:#1b4a86;
-  --panel:#12335a; --panel-2:#1a3f6f;
-  --glass: rgba(255,255,255,.10);
-  --txt:#e7efff; --muted:#b8c8ea; --line:rgba(255,255,255,.08);
-  --primary:#60a5fa; --accent:#22d3ee; --hot:#f472b6; --vs:#f43f5e;
-  --team-a:#22d3ee; --team-b:#f59e0b;
+  --bg:#1f1a14; --bg-2:#3a2a1d; /* nền nâu ấm */
+  --panel:#2b2219; --panel-2:#3b2e22; /* panel sepia */
+  --glass: rgba(255,245,220,.08);
+  --txt:#f7efe2; --muted:#d7c7ad; --line:rgba(255,245,220,.10);
+  --primary:#e6b56a; --accent:#d8a76d; --hot:#c47a7a; --vs:#b65e5e;
+  --team-a:#e6b56a;
   --radius:18px; --radius-lg:28px;
-  --shadow: 0 14px 40px rgba(0,0,0,.30);
+  --shadow: 0 14px 40px rgba(0,0,0,.28);
   --shadow-soft: 0 6px 18px rgba(0,0,0,.18);
   --maxw: 1200px;
 }
 
-/* Nhẹ tay tăng ánh sáng phần hero */
-.hero{
-  background:
-    radial-gradient(820px 320px at 10% 0%, rgba(96,165,250,.22), transparent 60%),
-    radial-gradient(760px 300px at 90% 0%, rgba(34,211,238,.22), transparent 60%);
-}
-
+/* Nền tổng thể: grad ấm + vignette nhẹ */
 *{box-sizing:border-box}
 html,body{
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
   color:var(--txt); line-height:1.55;
   background:
-    radial-gradient(1300px 650px at 18% -10%, rgba(34,211,238,.18), transparent 60%),
-    radial-gradient(1000px 560px at 82% -12%, rgba(244,114,182,.16), transparent 62%),
+    radial-gradient(1200px 600px at 20% -10%, rgba(230,181,106,.14), transparent 60%),
+    radial-gradient(900px 460px at 80% -12%, rgba(196,122,122,.12), transparent 62%),
     linear-gradient(180deg,var(--bg),var(--bg-2));
+  position: relative;
+  overflow-x: hidden;
+}
+body::after{ /* vignette */
+  content:""; position:fixed; inset:-10%; pointer-events:none;
+  background: radial-gradient(1200px 500px at 50% -200px, transparent, transparent 60%, rgba(0,0,0,.28) 100%);
+  z-index:-1;
 }
 
 .container{max-width:var(--maxw); margin:0 auto; padding: 24px 20px}
-.card{background:linear-gradient(180deg, color-mix(in oklab, var(--panel), white 4%), color-mix(in oklab, var(--panel-2), white 6%)); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); backdrop-filter: blur(10px) saturate(120%); -webkit-backdrop-filter: blur(10px) saturate(120%);}
+.card{background:linear-gradient(180deg, color-mix(in oklab, var(--panel), white 4%), color-mix(in oklab, var(--panel-2), white 6%)); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); backdrop-filter: blur(8px) saturate(110%); -webkit-backdrop-filter: blur(8px) saturate(110%);}
 .subtle{color:var(--muted)}
 
-/* ====== HERO ====== */
+/* ====== HERO (kỷ niệm) ====== */
 .hero{
   position:relative; overflow:hidden; isolation:isolate;
-  padding: 42px 0 26px; margin-bottom: 8px;
+  padding: 48px 0 26px; margin-bottom: 8px;
   background:
-    radial-gradient(820px 320px at 10% 0%, rgba(96,165,250,.18), transparent 60%),
-    radial-gradient(760px 300px at 90% 0%, rgba(34,211,238,.18), transparent 60%);
+    radial-gradient(820px 320px at 10% 0%, rgba(230,181,106,.20), transparent 60%),
+    radial-gradient(760px 300px at 90% 0%, rgba(196,122,122,.18), transparent 60%);
+  filter: sepia(.08) saturate(.95) contrast(1.02);
 }
 .hero .orbs{ position:absolute; inset:0; pointer-events:none; z-index:-1 }
-.orb{ position:absolute; filter: blur(52px); opacity:.72; border-radius:50%; }
-.orb.o1{ width:340px; height:340px; background:#1ed7ff44; top:-60px; left:-40px; animation: float 9s ease-in-out infinite }
-.orb.o2{ width:280px; height:280px; background:#ff4da644; top:-80px; right:-60px; animation: float 11s ease-in-out infinite reverse }
+.orb{ position:absolute; filter: blur(52px); opacity:.65; border-radius:50%; }
+.orb.o1{ width:340px; height:340px; background:#d8a76d55; top:-60px; left:-40px; animation: float 9s ease-in-out infinite }
+.orb.o2{ width:280px; height:280px; background:#c47a7a55; top:-80px; right:-60px; animation: float 11s ease-in-out infinite reverse }
 @keyframes float{ 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(14px) } }
 
 .title{
-  font-size: clamp(28px, 4.6vw, 52px); margin:0 0 10px; letter-spacing:.3px; font-weight:900;
-  background: conic-gradient(from 180deg at 50% 50%, var(--accent), #fff, var(--hot), var(--primary));
+  font-size: clamp(28px, 4.6vw, 50px); margin:0 0 8px; letter-spacing:.3px; font-weight:900;
+  background: linear-gradient(180deg, #fff, var(--primary));
   -webkit-background-clip:text; background-clip:text; color:transparent;
+  text-shadow: 0 2px 0 rgba(0,0,0,.06);
 }
 .hero-meta{ display:flex; flex-wrap:wrap; gap:10px; align-items:center }
-.chip{ display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius: 999px; background: rgba(255,255,255,.06); border:1px solid var(--line); font-weight:700; letter-spacing:.2px; backdrop-filter: blur(10px) saturate(120%); -webkit-backdrop-filter: blur(10px) saturate(120%);}
+.chip{
+  display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius: 999px;
+  background: rgba(255,245,220,.06); border:1px solid var(--line);
+  font-weight:700; letter-spacing:.2px; backdrop-filter: blur(8px) saturate(110%); -webkit-backdrop-filter: blur(8px) saturate(110%);
+}
 .chip b{color:#fff}
 
-/* Countdown */
-.countdown{ display:flex; gap:10px; margin-top:14px; }
-.cd{ display:grid; place-items:center; padding:10px 12px; min-width:72px; border-radius:14px; background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04)); border:1px solid var(--line); box-shadow:var(--shadow-soft); backdrop-filter: blur(10px) saturate(120%); -webkit-backdrop-filter: blur(10px) saturate(120%);}
-.cd b{ font-size: clamp(18px, 3.2vw, 28px) }
-.cd span{ font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.16em }
+/* ====== HONOR (thay VERSUS, chỉ Hi FPT) ====== */
+.honor{ margin-top: 18px }
+.honor-grid{ display:grid; gap:18px; grid-template-columns: 1fr; }
+.honor-card{
+  position:relative; padding:18px; border-radius: var(--radius); border:1px solid var(--line);
+  background: linear-gradient(180deg, rgba(255,245,220,.06), rgba(255,245,220,.03));
+  box-shadow:var(--shadow-soft); backdrop-filter: blur(10px) saturate(110%); -webkit-backdrop-filter: blur(10px) saturate(110%);
+  overflow:hidden;
+}
+.honor-card::after{ /* dải sáng film */
+  content:""; position:absolute; inset:-40% -60% auto; height:140%; transform:rotate(12deg);
+  background: radial-gradient(250px 100px at 50% 50%, rgba(255,255,255,.07), transparent 60%); pointer-events:none;
+}
+.honor-head{ display:flex; gap:12px; align-items:center; margin-bottom:12px }
+.honor-logo{ width:76px; height:76px; border-radius:18px; object-fit:cover; border: 2px solid var(--line); box-shadow:var(--shadow-soft); background:#000 }
+.honor-name{ font-size: clamp(18px, 2.6vw, 28px); margin:0; font-weight:900; color: var(--team-a) }
+.honor-tag{ font-size:13px; opacity:.9 }
 
-/* ====== VERSUS ====== */
-.versus{ margin-top: 18px }
-.vs-grid{ display:grid; gap:18px; grid-template-columns: 1fr 120px 1fr; align-items:stretch }
-@media (max-width: 900px){ .vs-grid{ grid-template-columns: 1fr; } }
+.ribbon{
+  position:absolute; top:14px; right:-38px; transform: rotate(18deg);
+  background: linear-gradient(90deg, #caa062, #f0d3a0);
+  color:#3b2e22; font-weight:1000; letter-spacing:.06em; padding:8px 48px; border:1px solid rgba(0,0,0,.12);
+  text-shadow: 0 1px 0 rgba(255,255,255,.35);
+  box-shadow: 0 8px 18px rgba(0,0,0,.18);
+}
+.honor-media{ display:grid; grid-template-columns: 1fr 1fr; gap:18px }
+@media (max-width: 760px){ .honor-media{ grid-template-columns: 1fr } }
 
-.team-card{ position:relative; padding: 18px; overflow:hidden; border-radius: var(--radius); border: 1px solid var(--line); background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03)); box-shadow:var(--shadow-soft); backdrop-filter: blur(10px) saturate(120%); -webkit-backdrop-filter: blur(10px) saturate(120%); }
-.team-card::after{ content:""; position:absolute; inset:-40% -60% auto; height:140%; transform:rotate(12deg); background: radial-gradient(250px 100px at 50% 50%, rgba(255,255,255,.08), transparent 60%); pointer-events:none }
-.team-head{ display:flex; gap:12px; align-items:center; margin-bottom:12px }
-.team-logo{ width:68px; height:68px; border-radius:18px; object-fit:cover; border: 2px solid var(--line); box-shadow:var(--shadow-soft); background:#000 }
-.team-name{ font-size: clamp(18px, 2.8vw, 28px); margin:0; font-weight:900 }
-.team-tag{ font-size:13px; opacity:.85 }
-.poster{ aspect-ratio: 4/3; width:100%; border-radius: 14px; overflow:hidden; border:1px solid var(--line); background:#020617; box-shadow:var(--shadow-soft); backdrop-filter: blur(6px) saturate(115%); -webkit-backdrop-filter: blur(6px) saturate(115%);}
-.poster img{ width:100%; height:100%; object-fit:cover; display:block; transition: transform .35s ease }
+.poster{ aspect-ratio: 4/3; width:100%; border-radius: 14px; overflow:hidden; border:1px solid var(--line); background:#20160f; box-shadow:var(--shadow-soft);}
+.poster img{
+  width:100%; height:100%; object-fit:cover; display:block; transition: transform .35s ease;
+  filter: sepia(.22) contrast(1.05) saturate(.9);
+  /* Tối ưu off-screen */
+  content-visibility:auto;
+  contain-intrinsic-size: 400px 300px;
+}
 .poster:hover img{ transform: scale(1.03) }
 
-.vs-badge{ display:grid; place-items:center; padding: 12px 14px; border-radius: 16px; border:1px solid var(--line); background: linear-gradient(180deg, rgba(244,63,94,.22), rgba(244,63,94,.10)); box-shadow: var(--shadow); backdrop-filter: blur(10px) saturate(120%); -webkit-backdrop-filter: blur(10px) saturate(120%);}
-.vs-badge .txt{ font-size: clamp(28px, 4vw, 48px); font-weight: 1000; letter-spacing:1px; color:#fff; text-shadow: 0 8px 26px rgba(244,63,94,.45) }
-
-.team-a .team-name{ color: var(--team-a) }
-.team-b .team-name{ color: var(--team-b) }
-
-/* ====== MOMENTS GRID ====== */
+/* ====== SECTION / GALLERY (polaroid vibe) ====== */
 .section{ margin-top: 28px }
-.section h2{ margin: 0 0 14px; font-size: clamp(20px, 3.4vw, 30px) }
+.section h2{ margin: 0 0 14px; font-size: clamp(20px, 3.2vw, 30px) }
 .row-title{ margin: 12px 0 10px; font-weight:900; letter-spacing:.02em }
 
-/* Album link dưới row-title */
 .album-row{ margin: -4px 0 12px; }
 .album-link{
   display:inline-flex; align-items:center; gap:8px; padding:8px 12px;
-  border-radius:999px; background: rgba(255,255,255,.06); border:1px solid var(--line);
+  border-radius:999px; background: rgba(255,245,220,.06); border:1px solid var(--line);
   text-decoration:none; color:#fff; font-weight:700; letter-spacing:.2px;
 }
-.album-link:hover{ background: rgba(255,255,255,.10); }
+.album-link:hover{ background: rgba(255,245,220,.10); }
 
 .gallery-4{ display:grid; gap:22px; grid-template-columns: repeat(4, 1fr) }
 @media (max-width: 1100px){ .gallery-4{ grid-template-columns: repeat(3, 1fr) } }
 @media (max-width: 760px){ .gallery-4{ grid-template-columns: repeat(2, 1fr) } }
 @media (max-width: 520px){ .gallery-4{ grid-template-columns: 1fr } }
 
-.moment{ position:relative; border:1px solid var(--line); border-radius: 16px; overflow:hidden; background: rgba(255,255,255,.04); box-shadow:var(--shadow-soft); backdrop-filter: blur(8px) saturate(115%); -webkit-backdrop-filter: blur(8px) saturate(115%); }
-.moment .shot{ position:relative; aspect-ratio:4/3; width:100%; background:#0b1020; cursor: zoom-in }
-.moment img{ width:100%; height:100%; object-fit:cover; display:block; transition: transform .28s ease }
+.moment{ position:relative; border:1px solid var(--line); border-radius: 12px; overflow:hidden; background: rgba(255,245,220,.04); box-shadow:var(--shadow-soft); transform: rotate(-.25deg); }
+.moment:nth-child(2n){ transform: rotate(.3deg) }
+.moment .shot{ position:relative; aspect-ratio:4/3; width:100%; background:#0b0a09; cursor: zoom-in }
+.moment img{
+  width:100%; height:100%; object-fit:cover; display:block; transition: transform .28s ease; filter: sepia(.16) contrast(1.03) saturate(.9);
+  /* Tối ưu off-screen */
+  content-visibility:auto;
+  contain-intrinsic-size: 400px 300px;
+}
 .moment:hover img{ transform: scale(1.03) }
-.moment .cap{ position:absolute; left:8px; right:8px; bottom:8px; padding:6px 8px; border-radius:8px; font-size:12px; color:#e7efff; background: linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.30)); border:1px solid rgba(255,255,255,.12) }
+.moment .cap{ position:absolute; left:8px; right:8px; bottom:8px; padding:6px 8px; border-radius:8px; font-size:12px; color:#f7efe2; background: linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.30)); border:1px solid rgba(255,245,220,.12) }
 
 /* Video thumb style */
 .moment.video .shot{ cursor:pointer }
 .moment.video .play{ position:absolute; inset:0; display:grid; place-items:center }
-.moment.video .play::before{ content:""; width:68px; height:68px; border-radius:999px; background: rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.25); box-shadow: 0 8px 24px rgba(0,0,0,.35) }
+.moment.video .play::before{ content:""; width:68px; height:68px; border-radius:999px; background: rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.18); box-shadow: 0 8px 24px rgba(0,0,0,.32) }
 .moment.video .play::after{ content:""; position:absolute; width:0; height:0; border-left:18px solid #fff; border-top:12px solid transparent; border-bottom:12px solid transparent; margin-left:3px }
-.moment.video:hover .play::before{ background: rgba(0,0,0,.6) }
 
-/* ====== LIGHTBOX (fix lệch iframe) ====== */
+/* ====== LIGHTBOX ====== */
 #lightbox{ position:fixed; inset:0; display:grid; place-items:center; padding:10px;
   background: rgba(0,0,0,.72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index:9999; }
 #lightbox[hidden]{ display:none }
@@ -167,73 +189,67 @@ footer{ text-align:center; color:var(--muted); padding: 26px 0 40px }
 .mini{ font-size:12px }
 
 /* Utility */
-.card{ margin-top:12px }
 .center{ text-align:center }
 .mt8{ margin-top:8px } .mt14{ margin-top:14px } .mt20{ margin-top:20px }
 
 @media (prefers-reduced-motion: reduce){
   .orb{ animation:none }
   .poster img{ transition:none }
+  .moment img{ transition:none }
 }
   </style>
 </head>
 <body>
-  <!-- ===== HERO ===== -->
+  <!-- ===== HERO (kỷ niệm Á quân) ===== -->
   <header class="hero">
     <div class="orbs"><span class="orb o1"></span><span class="orb o2"></span></div>
     <div class="container">
-      <h1 class="title">CÚP BẠC – CHUNG KẾT FTEL HCM OPEN 2025</h1>
+      <h1 class="title">Á QUÂN CÚP BẠC – FTEL FOOTBALL 2025</h1>
       <div class="hero-meta">
-        <span class="chip" title="Thời gian"><b>07:00</b> • 09/11/2025</span>
-        <span class="chip" title="Địa điểm"><b>Quốc Hưng Arena</b></span>
-        <span class="chip" title="Hình thức"><b>Chung kết</b> • FTEL HCM OPEN</span>
-      </div>
-      <div class="countdown" aria-label="Đếm ngược tới giờ bóng lăn">
-        <div class="cd"><b id="cd-days">--</b><span>Ngày</span></div>
-        <div class="cd"><b id="cd-hours">--</b><span>Giờ</span></div>
-        <div class="cd"><b id="cd-min">--</b><span>Phút</span></div>
-        <div class="cd"><b id="cd-sec">--</b><span>Giây</span></div>
+        <span class="chip" title="Đội bóng"><b>Hi FPT</b> • Sân 7</span>
+        <span class="chip" title="Trạng thái"><b>Đã khép lại</b> • 09/11/2025</span>
+        <span class="chip" title="Tự hào"><b>🏆 Á quân</b> • Một mùa giải đáng nhớ</span>
       </div>
     </div>
   </header>
 
-  <!-- ===== VERSUS ===== -->
-  <section class="versus container">
-    <div class="vs-grid">
-      <!-- TEAM A -->
-      <article class="team-card team-a">
-        <div class="team-head">
-          <img class="team-logo" src="ass/cup-bac/hifpt.webp" alt="Logo đội A" />
+  <!-- ===== HONOR (thay VERSUS) ===== -->
+  <section class="honor container">
+    <div class="honor-grid">
+      <!-- HI FPT ONLY -->
+      <article class="honor-card">
+        <div class="ribbon">Á QUÂN</div>
+        <div class="honor-head">
+          <!-- Logo: giữ eager để không ảnh hưởng LCP -->
+          <img class="honor-logo" src="ass/cup-bac/hifpt.webp" alt="Logo Hi FPT" />
           <div>
-            <h3 class="team-name">Hi FPT</h3>
-            <div class="team-tag subtle">Đội hình uy tín nhất giải</div>
+            <h3 class="honor-name">Hi FPT</h3>
+            <div class="honor-tag subtle">Tinh thần đoàn kết • Quyết tâm • Fair-play</div>
           </div>
         </div>
-        <div class="poster"><img src="ass/cup-bac/team-hifpt.png" alt="Poster đội A" /></div>
-      </article>
-
-      <!-- VS BADGE -->
-      <div class="vs-badge card">
-        <div class="txt">VS</div>
-      </div>
-
-      <!-- TEAM B -->
-      <article class="team-card team-b">
-        <div class="team-head">
-          <img class="team-logo" src="ass/cup-bac/inf.png" alt="Logo đội B" />
-          <div>
-            <h3 class="team-name">iNF</h3>
-            <div class="team-tag subtle">Đội rất mạnh, chứng tỏ bản lĩnh á quân</div>
+        <div class="honor-media">
+          <div class="poster">
+            <img
+              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+              data-src="ass/cup-bac/team-hifpt.png"
+              alt="Poster tập thể Hi FPT"
+              loading="lazy" decoding="async" fetchpriority="low" />
+          </div>
+          <div class="poster">
+            <img
+              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+              data-src="ass/cup-bac/vong-bang/video.jpg"
+              alt="Khoảnh khắc đáng nhớ Hi FPT"
+              loading="lazy" decoding="async" fetchpriority="low" />
           </div>
         </div>
-        <div class="poster"><img src="ass/cup-bac/team-inf.png" alt="Poster đội B" /></div>
       </article>
     </div>
   </section>
 
   <!-- ===== ROAD TO FINAL ===== -->
   <section class="section container card" aria-labelledby="road-title">
-    <h2 id="road-title">Khoảnh khắc • Con đường đến trận chung kết</h2>
+    <h2 id="road-title">Khoảnh khắc • Hành trình tới ngôi Á quân</h2>
 
     <!-- Row 1 -->
     <h3 class="row-title">Vòng bảng - Đối đầu KV Hồ Chí Minh (26/10/2025)</h3>
@@ -242,21 +258,43 @@ footer{ text-align:center; color:var(--muted); padding: 26px 0 40px }
     </p>
     <div class="gallery-4">
       <figure class="moment" data-full="ass/cup-bac/vong-bang/a1.jpg">
-        <div class="shot"><img src="ass/cup-bac/vong-bang/a1.jpg" alt="Vòng bảng – Trận 1" /></div>
+        <div class="shot">
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            data-src="ass/cup-bac/vong-bang/a1.jpg"
+            alt="Vòng bảng – Trận 1"
+            loading="lazy" decoding="async" fetchpriority="low" />
+        </div>
         <figcaption class="cap">Đoàn kết</figcaption>
       </figure>
       <figure class="moment" data-full="ass/cup-bac/vong-bang/a2.jpg">
-        <div class="shot"><img src="ass/cup-bac/vong-bang/a2.jpg" alt="Vòng bảng – Trận 2" /></div>
+        <div class="shot">
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            data-src="ass/cup-bac/vong-bang/a2.jpg"
+            alt="Vòng bảng – Trận 2"
+            loading="lazy" decoding="async" fetchpriority="low" />
+        </div>
         <figcaption class="cap">Tự tin</figcaption>
       </figure>
       <figure class="moment" data-full="ass/cup-bac/vong-bang/a3.jpg">
-        <div class="shot"><img src="ass/cup-bac/vong-bang/a3.jpg" alt="Vòng bảng – Trận 3" /></div>
+        <div class="shot">
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            data-src="ass/cup-bac/vong-bang/a3.jpg"
+            alt="Vòng bảng – Trận 3"
+            loading="lazy" decoding="async" fetchpriority="low" />
+        </div>
         <figcaption class="cap">Cố gắng</figcaption>
       </figure>
 
       <figure class="moment video">
         <div class="shot">
-          <img src="ass/cup-bac/vong-bang/video.jpg" alt="Highlights" />
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            data-src="ass/cup-bac/vong-bang/video.jpg"
+            alt="Highlights"
+            loading="lazy" decoding="async" fetchpriority="low" />
           <span class="play" aria-hidden="true"></span>
         </div>
         <template class="embed">
@@ -273,21 +311,43 @@ footer{ text-align:center; color:var(--muted); padding: 26px 0 40px }
     </p>
     <div class="gallery-4">
       <figure class="moment" data-full="ass/cup-bac/vong-bang/b1.jpg">
-        <div class="shot"><img src="ass/cup-bac/vong-bang/b1.jpg" alt="Vòng bảng – Trận 1" /></div>
+        <div class="shot">
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            data-src="ass/cup-bac/vong-bang/b1.jpg"
+            alt="Vòng bảng – Trận 1"
+            loading="lazy" decoding="async" fetchpriority="low" />
+        </div>
         <figcaption class="cap">Nỗ lực</figcaption>
       </figure>
       <figure class="moment" data-full="ass/cup-bac/vong-bang/b2.jpg">
-        <div class="shot"><img src="ass/cup-bac/vong-bang/b2.jpg" alt="Vòng bảng – Trận 2" /></div>
+        <div class="shot">
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            data-src="ass/cup-bac/vong-bang/b2.jpg"
+            alt="Vòng bảng – Trận 2"
+            loading="lazy" decoding="async" fetchpriority="low" />
+        </div>
         <figcaption class="cap">Đổ máu</figcaption>
       </figure>
       <figure class="moment" data-full="ass/cup-bac/vong-bang/b3.jpg">
-        <div class="shot"><img src="ass/cup-bac/vong-bang/b3.jpg" alt="Vòng bảng – Trận 3" /></div>
+        <div class="shot">
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            data-src="ass/cup-bac/vong-bang/b3.jpg"
+            alt="Vòng bảng – Trận 3"
+            loading="lazy" decoding="async" fetchpriority="low" />
+        </div>
         <figcaption class="cap">Hậu phương</figcaption>
       </figure>
 
       <figure class="moment video">
         <div class="shot">
-          <img src="ass/cup-bac/vong-bang/video.jpg" alt="Highlights" />
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            data-src="ass/cup-bac/vong-bang/video.jpg"
+            alt="Highlights"
+            loading="lazy" decoding="async" fetchpriority="low" />
           <span class="play" aria-hidden="true"></span>
         </div>
         <template class="embed">
@@ -304,21 +364,43 @@ footer{ text-align:center; color:var(--muted); padding: 26px 0 40px }
     </p>
     <div class="gallery-4">
       <figure class="moment" data-full="ass/cup-bac/vong-bang/c1.jpg">
-        <div class="shot"><img src="ass/cup-bac/vong-bang/c1.jpg" alt="Vòng bảng – Trận 1" /></div>
+        <div class="shot">
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            data-src="ass/cup-bac/vong-bang/c1.jpg"
+            alt="Vòng bảng – Trận 1"
+            loading="lazy" decoding="async" fetchpriority="low" />
+        </div>
         <figcaption class="cap">Chốt chặn</figcaption>
       </figure>
       <figure class="moment" data-full="ass/cup-bac/vong-bang/c2.jpg">
-        <div class="shot"><img src="ass/cup-bac/vong-bang/c2.jpg" alt="Vòng bảng – Trận 2" /></div>
+        <div class="shot">
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            data-src="ass/cup-bac/vong-bang/c2.jpg"
+            alt="Vòng bảng – Trận 2"
+            loading="lazy" decoding="async" fetchpriority="low" />
+        </div>
         <figcaption class="cap">Bình tĩnh</figcaption>
       </figure>
       <figure class="moment" data-full="ass/cup-bac/vong-bang/c3.jpg">
-        <div class="shot"><img src="ass/cup-bac/vong-bang/c3.jpg" alt="Vòng bảng – Trận 3" /></div>
+        <div class="shot">
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            data-src="ass/cup-bac/vong-bang/c3.jpg"
+            alt="Vòng bảng – Trận 3"
+            loading="lazy" decoding="async" fetchpriority="low" />
+        </div>
         <figcaption class="cap">Cản phá</figcaption>
       </figure>
 
       <figure class="moment video">
         <div class="shot">
-          <img src="ass/cup-bac/vong-bang/video.jpg" alt="Highlights" />
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            data-src="ass/cup-bac/vong-bang/video.jpg"
+            alt="Highlights"
+            loading="lazy" decoding="async" fetchpriority="low" />
           <span class="play" aria-hidden="true"></span>
         </div>
         <template class="embed">
@@ -335,21 +417,43 @@ footer{ text-align:center; color:var(--muted); padding: 26px 0 40px }
     </p>
     <div class="gallery-4">
       <figure class="moment" data-full="ass/cup-bac/vong-bang/d1.jpg">
-        <div class="shot"><img src="ass/cup-bac/vong-bang/d1.jpg" alt="Vòng bảng – Trận 1" /></div>
+        <div class="shot">
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            data-src="ass/cup-bac/vong-bang/d1.jpg"
+            alt="Vòng bảng – Trận 1"
+            loading="lazy" decoding="async" fetchpriority="low" />
+        </div>
         <figcaption class="cap">Hy vọng</figcaption>
       </figure>
       <figure class="moment" data-full="ass/cup-bac/vong-bang/d2.jpg">
-        <div class="shot"><img src="ass/cup-bac/vong-bang/d2.jpg" alt="Vòng bảng – Trận 2" /></div>
+        <div class="shot">
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            data-src="ass/cup-bac/vong-bang/d2.jpg"
+            alt="Vòng bảng – Trận 2"
+            loading="lazy" decoding="async" fetchpriority="low" />
+        </div>
         <figcaption class="cap">Cản đảm</figcaption>
       </figure>
       <figure class="moment" data-full="ass/cup-bac/vong-bang/d3.jpg">
-        <div class="shot"><img src="ass/cup-bac/vong-bang/d3.jpg" alt="Vòng bảng – Trận 3" /></div>
+        <div class="shot">
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            data-src="ass/cup-bac/vong-bang/d3.jpg"
+            alt="Vòng bảng – Trận 3"
+            loading="lazy" decoding="async" fetchpriority="low" />
+        </div>
         <figcaption class="cap">Vững chắc</figcaption>
       </figure>
 
       <figure class="moment video">
         <div class="shot">
-          <img src="ass/cup-bac/vong-bang/video.jpg" alt="Highlights" />
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            data-src="ass/cup-bac/vong-bang/video.jpg"
+            alt="Highlights"
+            loading="lazy" decoding="async" fetchpriority="low" />
           <span class="play" aria-hidden="true"></span>
         </div>
         <template class="embed">
@@ -366,21 +470,43 @@ footer{ text-align:center; color:var(--muted); padding: 26px 0 40px }
     </p>
     <div class="gallery-4">
       <figure class="moment" data-full="ass/cup-bac/vong-bang/e1.jpg">
-        <div class="shot"><img src="ass/cup-bac/vong-bang/e1.jpg" alt="Tứ kết" /></div>
+        <div class="shot">
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            data-src="ass/cup-bac/vong-bang/e1.jpg"
+            alt="Tứ kết"
+            loading="lazy" decoding="async" fetchpriority="low" />
+        </div>
         <figcaption class="cap">Bất ngờ</figcaption>
       </figure>
       <figure class="moment" data-full="ass/cup-bac/vong-bang/e2.jpg">
-        <div class="shot"><img src="ass/cup-bac/vong-bang/e2.jpg" alt="Bán kết" /></div>
+        <div class="shot">
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            data-src="ass/cup-bac/vong-bang/e2.jpg"
+            alt="Bán kết"
+            loading="lazy" decoding="async" fetchpriority="low" />
+        </div>
         <figcaption class="cap">San bằng</figcaption>
       </figure>
       <figure class="moment" data-full="ass/cup-bac/vong-bang/e3.jpg">
-        <div class="shot"><img src="ass/cup-bac/vong-bang/e3.jpg" alt="Khoảnh khắc nổi bật 1" /></div>
+        <div class="shot">
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            data-src="ass/cup-bac/vong-bang/e3.jpg"
+            alt="Khoảnh khắc nổi bật 1"
+            loading="lazy" decoding="async" fetchpriority="low" />
+        </div>
         <figcaption class="cap">Lật kèo</figcaption>
       </figure>
 
       <figure class="moment video">
         <div class="shot">
-          <img src="ass/cup-bac/vong-bang/video.jpg" alt="Highlights" />
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            data-src="ass/cup-bac/vong-bang/video.jpg"
+            alt="Highlights"
+            loading="lazy" decoding="async" fetchpriority="low" />
           <span class="play" aria-hidden="true"></span>
         </div>
         <template class="embed">
@@ -392,7 +518,7 @@ footer{ text-align:center; color:var(--muted); padding: 26px 0 40px }
   </section>
 
   <footer class="container">
-    <div class="mini">© 2025 FTEL HCM OPEN • Đơn vị tổ chức: Ban Phong trào FTEL HCM • Địa điểm: Quốc Hưng Arena</div>
+    <div class="mini">© 2025 FTEL FOOTBALL • Hi FPT • Một mùa giải kỷ niệm thật đẹp</div>
   </footer>
 
   <!-- Lightbox -->
@@ -409,50 +535,43 @@ footer{ text-align:center; color:var(--muted); padding: 26px 0 40px }
   </div>
 
 <script>
+/* ===== Lazy-load ảnh với IntersectionObserver ===== */
+(function(){
+  const PLACEHOLDER = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+  const imgs = document.querySelectorAll('img[data-src]');
+
+  // fallback nhẹ nếu browser không hỗ trợ IO
+  function loadImg(el){
+    const src = el.getAttribute('data-src');
+    if (!src) return;
+    el.src = src;
+    el.removeAttribute('data-src');
+  }
+
+  if ('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries, obs) => {
+      entries.forEach(ent => {
+        if (ent.isIntersecting){
+          const img = ent.target;
+          loadImg(img);
+          obs.unobserve(img);
+        }
+      });
+    }, { rootMargin: '200px 0px', threshold: 0.01 });
+
+    imgs.forEach(img => io.observe(img));
+  } else {
+    // no IO: load ngay
+    imgs.forEach(loadImg);
+  }
+})();
+
+/* ===== Lightbox: click ảnh -> xem ảnh; click video -> nhúng iframe trong lightbox ===== */
 (function(){
   const lb       = document.getElementById('lightbox');
   const lbImg    = document.getElementById('lb-img');
   const lbPlayer = document.getElementById('lb-player');
   const btnClose = document.querySelector('#lightbox .lb-close');
-
-  function parseTimeToSeconds(t){
-    if (!t) return 0;
-    if (/^\d+$/.test(t)) return +t;
-    const m = String(t).match(/(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?/);
-    if (!m) return 0;
-    return (+(m[1]||0))*3600 + (+(m[2]||0))*60 + (+(m[3]||0));
-  }
-
-  function toEmbedHTML(input){
-    if (!input) return '';
-    if (/<\s*iframe[\s>]/i.test(input)) return input.trim();
-
-    let id = '', start = 0;
-    try{
-      if (!/^(https?:)?\/\//.test(input)){
-        const [maybeId, qs] = input.split('?');
-        id = maybeId;
-        if (qs){
-          const m = qs.match(/(?:^|&)t=([^&]+)/);
-          if (m) start = parseTimeToSeconds(m[1]);
-        }
-      }else{
-        const u = new URL(input, location.href);
-        if (u.hostname.includes('youtu.be')) id = u.pathname.slice(1);
-        else if (u.searchParams.get('v'))   id = u.searchParams.get('v');
-        else {
-          const m = u.pathname.match(/\/(embed|shorts)\/([^/?]+)/);
-          id = m ? m[2] : '';
-        }
-        const t = u.searchParams.get('t') || u.searchParams.get('start');
-        start = parseTimeToSeconds(t);
-      }
-    }catch(e){ id = ''; }
-
-    if (!id) return '';
-    const src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0&modestbranding=1${start?`&start=${start}`:''}`;
-    return `<iframe src="${src}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
-  }
 
   function openImage(src){
     lbImg.src = src;
@@ -460,16 +579,12 @@ footer{ text-align:center; color:var(--muted); padding: 26px 0 40px }
     lb.classList.add('show-img');
     lb.removeAttribute('hidden');
   }
-
-  function openEmbed(input){
-    const html = toEmbedHTML(input);
-    if (!html) return;
-    lbPlayer.innerHTML = html;
+  function openEmbedRaw(raw){
+    lbPlayer.innerHTML = raw;
     lb.classList.remove('show-img');
     lb.classList.add('show-video');
     lb.removeAttribute('hidden');
   }
-
   function closeLb(){
     lb.setAttribute('hidden','');
     lb.classList.remove('show-img','show-video');
@@ -486,16 +601,12 @@ footer{ text-align:center; color:var(--muted); padding: 26px 0 40px }
         const tpl = fig.querySelector('template.embed');
         if (tpl){
           const raw = (tpl.innerHTML && tpl.innerHTML.trim()) || (tpl.textContent && tpl.textContent.trim()) || '';
-          if (raw) return openEmbed(raw);
+          if (raw) return openEmbedRaw(raw);
         }
-        const input = fig.getAttribute('data-embed') || fig.getAttribute('data-yt') || '';
-        if (input) return openEmbed(input);
-        const a = fig.querySelector('a[href*="youtu"]');
-        if (a) return openEmbed(a.getAttribute('href'));
       }else{
         const img = el.querySelector('img');
         const full = fig.getAttribute('data-full') || (img && (img.currentSrc || img.src));
-        if (full) openImage(full);
+        if (full) return openImage(full);
       }
     });
   });
@@ -503,48 +614,6 @@ footer{ text-align:center; color:var(--muted); padding: 26px 0 40px }
   btnClose && btnClose.addEventListener('click', closeLb);
   lb && lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
-})();
-</script>
-
-<script>
-(function(){
-  // 07:00 ngày 09/11/2025 theo giờ Việt Nam (+07:00)
-  const kickoff = new Date('2025-11-09T07:00:00+07:00');
-
-  const dEl = document.getElementById('cd-days');
-  const hEl = document.getElementById('cd-hours');
-  const mEl = document.getElementById('cd-min');
-  const sEl = document.getElementById('cd-sec');
-
-  function pad(n){ return String(n).padStart(2,'0'); }
-
-  function tick(){
-    const now = new Date();
-    let diff = kickoff - now;
-
-    if (diff <= 0){
-      dEl.textContent = '00';
-      hEl.textContent = '00';
-      mEl.textContent = '00';
-      sEl.textContent = '00';
-      clearInterval(tmr);
-      return;
-    }
-
-    const sec = Math.floor(diff/1000);
-    const days = Math.floor(sec/86400);
-    const hours = Math.floor((sec % 86400) / 3600);
-    const mins = Math.floor((sec % 3600) / 60);
-    const secs = sec % 60;
-
-    dEl.textContent = pad(days);
-    hEl.textContent = pad(hours);
-    mEl.textContent = pad(mins);
-    sEl.textContent = pad(secs);
-  }
-
-  tick();
-  const tmr = setInterval(tick, 1000);
 })();
 </script>
 
