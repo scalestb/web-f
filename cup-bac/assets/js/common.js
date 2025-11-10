@@ -1,0 +1,1 @@
+// Common JS (placeholder for shared behaviors)
