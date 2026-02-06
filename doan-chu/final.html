@@ -1,0 +1,922 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trò chơi đoán chữ — YEP 2026</title>
+  <style>
+    :root {
+      --bg1: #260000;
+      --bg2: #6d0000;
+
+      --gold: #ffd36a;
+      --gold2: #ffb84d;
+      --cream: #fff3d8;
+
+      --ink: #1a0a06;
+      --muted: rgba(255, 243, 216, .80);
+
+      --line: rgba(255, 211, 106, .55);
+      --line2: rgba(255, 46, 46, .35);
+
+      --ok: #2bff9a;
+      --wrong: #ff2e2e;
+
+      --shadow: 0 24px 90px rgba(0, 0, 0, .55);
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      height: 100%
+    }
+
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color: var(--cream);
+      background:
+        radial-gradient(900px 600px at 18% 0%, rgba(255, 211, 106, .24), transparent 56%),
+        radial-gradient(900px 600px at 85% 15%, rgba(255, 120, 120, .22), transparent 58%),
+        linear-gradient(180deg, var(--bg2), var(--bg1));
+      overflow-x: hidden;
+    }
+
+    /* subtle pattern for projector depth */
+    .pattern {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .10;
+      background-image:
+        radial-gradient(circle at 12px 10px, rgba(255, 211, 106, .8) 1.6px, transparent 1.7px),
+        radial-gradient(circle at 42px 28px, rgba(255, 255, 255, .5) 1.2px, transparent 1.3px);
+      background-size: 56px 46px;
+      mix-blend-mode: screen;
+    }
+
+    .stage {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 28px 22px 110px;
+      gap: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== Header (presentation) ===== */
+    .header {
+      width: min(1320px, 100%);
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 18px 18px;
+      border-radius: 22px;
+      border: 2px solid rgba(255, 211, 106, .38);
+      background: linear-gradient(180deg, rgba(255, 255, 255, .10), rgba(255, 255, 255, .05));
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 280px;
+    }
+
+    .kicker {
+      font-size: 14px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .headline {
+      margin: 0;
+      font-size: clamp(26px, 3.0vw, 44px);
+      letter-spacing: 1.2px;
+      font-weight: 1000;
+      line-height: 1.05;
+    }
+
+    .subline {
+      font-size: clamp(14px, 1.2vw, 18px);
+      color: var(--muted);
+      letter-spacing: .6px;
+      font-weight: 700;
+    }
+
+    .stats {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      align-items: center;
+      text-align: right;
+    }
+
+    .pill {
+      border: 2px solid rgba(255, 211, 106, .35);
+      background: rgba(0, 0, 0, .18);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      letter-spacing: .8px;
+      color: var(--muted);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .pill b {
+      color: var(--cream);
+    }
+
+    .kbd {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      border: 2px solid rgba(255, 211, 106, .35);
+      padding: 2px 10px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, .18);
+      color: var(--cream);
+      font-weight: 900;
+    }
+
+    /* big horse watermark in header (Asian brush style) */
+    .horse-watermark {
+      position: absolute;
+      right: 16px;
+      top: -18px;
+      width: 360px;
+      height: 220px;
+      opacity: .22;
+      mix-blend-mode: screen;
+      pointer-events: none;
+      filter: drop-shadow(0 18px 26px rgba(0, 0, 0, .35));
+      transform: rotate(2deg);
+    }
+
+    .horse-watermark img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: saturate(1.05) contrast(1.05);
+    }
+
+    /* ===== Hint panel (very big, centered) ===== */
+    .hint-panel {
+      width: min(1320px, 100%);
+      border-radius: 26px;
+      padding: 18px 18px 18px;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(680px 260px at 20% 0%, rgba(255, 211, 106, .25), transparent 55%),
+        linear-gradient(180deg, rgba(255, 255, 255, .92), rgba(255, 243, 216, .90));
+      color: var(--ink);
+      border: 5px solid rgba(255, 211, 106, .95);
+      box-shadow:
+        0 30px 110px rgba(0, 0, 0, .55),
+        inset 0 0 0 4px rgba(255, 46, 46, .24);
+    }
+
+    .hint-top {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding-bottom: 10px;
+      border-bottom: 3px dashed rgba(255, 46, 46, .25);
+      margin-bottom: 14px;
+    }
+
+    .hint-label {
+      font-size: 16px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      font-weight: 1000;
+      color: rgba(38, 0, 0, .88);
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 2px solid rgba(255, 46, 46, .26);
+      background: rgba(255, 255, 255, .50);
+    }
+
+    .hint-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hintbtn {
+      appearance: none;
+      cursor: pointer;
+      border-radius: 999px;
+      padding: 12px 16px;
+      border: 3px solid rgba(38, 0, 0, .14);
+      background: linear-gradient(180deg, rgba(255, 211, 106, .95), rgba(255, 184, 77, .92));
+      color: rgba(38, 0, 0, .95);
+      font-weight: 1000;
+      letter-spacing: 1px;
+      font-size: 14px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, .18);
+      transition: transform .08s ease, filter .14s ease;
+    }
+
+    .hintbtn:hover {
+      filter: brightness(1.03);
+      transform: translateY(-1px);
+    }
+
+    .hintbtn:active {
+      transform: translateY(0) scale(.99);
+    }
+
+    .hint-content {
+      min-height: 132px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-weight: 1000;
+      letter-spacing: 1px;
+      font-size: clamp(26px, 3.2vw, 54px);
+      line-height: 1.15;
+      padding: 10px 10px 6px;
+      color: rgba(38, 0, 0, .95);
+    }
+
+    .hint-sub {
+      display: block;
+      margin-top: 10px;
+      font-size: clamp(16px, 1.4vw, 22px);
+      font-weight: 900;
+      letter-spacing: .8px;
+      color: rgba(38, 0, 0, .65);
+    }
+
+    /* Horses hint layout */
+    .horse-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      width: 100%;
+      padding: 6px 0;
+    }
+
+    .horse-img {
+      width: 110px;
+      height: 74px;
+      object-fit: cover;
+      border-radius: 16px;
+      box-shadow: 0 12px 26px rgba(0, 0, 0, .14);
+      border: 2px solid rgba(255, 46, 46, .20);
+      background: rgba(255, 255, 255, .55);
+    }
+
+    /* ===== Game board card ===== */
+    .game {
+      width: min(1320px, 100%);
+      border-radius: 26px;
+      border: 2px solid rgba(255, 211, 106, .38);
+      background: linear-gradient(180deg, rgba(255, 255, 255, .10), rgba(255, 255, 255, .05));
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .board {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 6px 6px;
+    }
+
+    .board-line {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .tile {
+      width: 104px;
+      height: 104px;
+      border-radius: 22px;
+      border: 3px solid rgba(255, 211, 106, .55);
+      background: rgba(255, 255, 255, .06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+      transition: transform .08s ease, background .14s ease, border-color .14s ease;
+    }
+
+    .tile:hover {
+      background: rgba(255, 255, 255, .10);
+      transform: translateY(-1px);
+    }
+
+    .tile:active {
+      transform: translateY(0) scale(.995);
+    }
+
+    .tile .char {
+      font-size: 40px;
+      font-weight: 1100;
+      letter-spacing: 1px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity .12s ease, transform .12s ease;
+      text-transform: uppercase;
+    }
+
+    .tile .dash {
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      bottom: 22px;
+      height: 9px;
+      border-radius: 10px;
+      background: rgba(255, 243, 216, .24);
+      opacity: 1;
+      transition: opacity .12s ease;
+    }
+
+    .tile.revealed {
+      background: rgba(255, 211, 106, .18);
+      border-color: rgba(255, 211, 106, .95);
+      box-shadow: 0 0 0 10px rgba(255, 211, 106, .07);
+    }
+
+    .tile.revealed .char {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .tile.revealed .dash {
+      opacity: 0;
+    }
+
+    .gap {
+      width: 26px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .controls {
+      margin-top: 16px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      border-top: 1px solid rgba(255, 211, 106, .22);
+      padding-top: 16px;
+    }
+
+    .btn {
+      appearance: none;
+      cursor: pointer;
+      border-radius: 18px;
+      padding: 14px 18px;
+      border: 2px solid rgba(255, 211, 106, .62);
+      background: linear-gradient(180deg, rgba(255, 211, 106, .24), rgba(255, 211, 106, .10));
+      color: var(--cream);
+      font-weight: 1000;
+      letter-spacing: 1px;
+      font-size: 16px;
+      box-shadow: 0 18px 55px rgba(0, 0, 0, .25);
+      transition: transform .08s ease, filter .14s ease;
+    }
+
+    .btn:hover {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+    }
+
+    .btn:active {
+      transform: translateY(0) scale(.99);
+    }
+
+    .result {
+      margin-top: 12px;
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      text-align: center;
+    }
+
+    .result .label {
+      color: var(--muted);
+      font-size: 14px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+
+    .result .phrase {
+      font-size: clamp(18px, 1.8vw, 26px);
+      font-weight: 1000;
+      letter-spacing: 1px;
+    }
+
+    /* ===== Toast (big, projector-friendly) ===== */
+    .toast {
+      position: fixed;
+      left: 50%;
+      top: 18px;
+      transform: translateX(-50%) translateY(-16px);
+      width: min(980px, calc(100vw - 16px));
+      border-radius: 26px;
+      border: 4px solid rgba(255, 211, 106, .75);
+      background: linear-gradient(180deg, rgba(255, 211, 106, .95), rgba(255, 184, 77, .95));
+      color: #260000;
+      box-shadow: 0 30px 120px rgba(0, 0, 0, .60);
+      padding: 20px 22px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .16s ease, transform .16s ease;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      z-index: 9999;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast .dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      margin-top: 7px;
+      background: rgba(38, 0, 0, .92);
+      box-shadow: 0 0 0 10px rgba(38, 0, 0, .10);
+      flex: 0 0 auto;
+    }
+
+    .toast .t1 {
+      margin: 0 0 6px 0;
+      font-weight: 1100;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-size: 16px;
+    }
+
+    .toast .t2 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 1000;
+      line-height: 1.25;
+      letter-spacing: .6px;
+    }
+
+    .toast.wrong {
+      border-color: rgba(255, 46, 46, .92);
+      background: linear-gradient(180deg, rgba(255, 46, 46, .95), rgba(212, 0, 0, .95));
+      color: #fff;
+    }
+
+    .toast.wrong .dot {
+      background: #fff;
+      box-shadow: 0 0 0 10px rgba(255, 255, 255, .14);
+    }
+
+    .toast.wrong .t1,
+    .toast.wrong .t2 {
+      color: #fff;
+    }
+
+    .toast.ok {
+      border-color: rgba(43, 255, 154, .88);
+      background: linear-gradient(180deg, rgba(43, 255, 154, .95), rgba(24, 192, 106, .95));
+      color: #0a130d;
+    }
+
+    .toast.ok .dot {
+      background: #0a130d;
+      box-shadow: 0 0 0 10px rgba(10, 19, 13, .14);
+    }
+
+    .toast.ok .t1 {
+      color: #0a130d;
+    }
+
+    .toast.ok .t2 {
+      color: rgba(10, 19, 13, .92);
+    }
+
+    @media (max-width: 980px) {
+      .tile {
+        width: 88px;
+        height: 88px;
+      }
+
+      .tile .char {
+        font-size: 34px;
+      }
+
+      .horse-watermark {
+        width: 300px;
+        height: 190px;
+        opacity: .18;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .stage {
+        padding: 18px 12px 100px;
+      }
+
+      .tile {
+        width: 64px;
+        height: 64px;
+        border-radius: 16px;
+      }
+
+      .tile .char {
+        font-size: 24px;
+      }
+
+      .tile .dash {
+        left: 14px;
+        right: 14px;
+        bottom: 14px;
+        height: 7px;
+      }
+
+      .hint-content {
+        min-height: 110px;
+      }
+
+      .horse-watermark {
+        display: none;
+      }
+
+      .toast .t2 {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="pattern"></div>
+
+  <main class="stage">
+    <header class="header">
+      <div class="horse-watermark" aria-hidden="true">
+        <img src="horse_gold.jpg" alt="" />
+      </div>
+
+      <div class="brand">
+        <div class="kicker">TẾT ÂM LỊCH 2026 • HI FPT</div>
+        <h1 class="headline">TRÒ CHƠI ĐOÁN CHỮ</h1>
+        <div class="subline">Nhấn phím <span class="kbd">A–Z</span> hoặc click ô để mở/đóng</div>
+      </div>
+
+      <div class="stats">
+        <div class="pill">ĐÃ MỞ: <b id="openedCount">0</b>/<b id="totalCount">0</b></div>
+        <div class="pill">PHÍM: <span class="kbd" id="lastKey">—</span></div>
+      </div>
+    </header>
+
+    <section class="hint-panel" aria-label="Gợi ý">
+      <div class="hint-top">
+        <div class="hint-label">GỢI Ý</div>
+        <div class="hint-actions">
+          <button class="hintbtn" type="button" data-hint="1">GỢI Ý 1</button>
+          <button class="hintbtn" type="button" data-hint="2">GỢI Ý 2</button>
+          <button class="hintbtn" type="button" data-hint="3">GỢI Ý 3</button>
+        </div>
+      </div>
+      <div id="hintContent" class="hint-content">
+        <div
+          style="width:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;">
+          <div>Chọn một gợi ý để bắt đầu</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="game">
+      <div class="board" aria-label="Bảng đoán chữ">
+        <div id="line1" class="board-line"></div>
+        <div id="line2" class="board-line"></div>
+      </div>
+
+      <div class="controls">
+        <button id="btnRevealAll" class="btn" type="button">HIỂN THỊ ĐÁP ÁN</button>
+        <button id="btnReset" class="btn" type="button">CHƠI LẠI</button>
+      </div>
+
+      <div class="result">
+        <div class="label">KẾT QUẢ</div>
+        <div class="phrase" id="resultText">—</div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite">
+    <div class="dot"></div>
+    <div>
+      <p class="t1" id="toastTitle">INFO</p>
+      <p class="t2" id="toastMsg"></p>
+    </div>
+  </div>
+
+  <script>
+    // ===== Phrase / layout (presentation) =====
+    // Display layout:
+    // Line 1: "X VERSION"
+    // Line 2: "NEW MISSION"
+    const LINE1 = "X VERSION";
+    const LINE2 = "NEW MISSION";
+    const PHRASE = "X Version, New Mission";
+
+    const TOK1 = Array.from(LINE1);
+    const TOK2 = Array.from(LINE2);
+
+    const isSpace = (ch) => ch === " ";
+    const isLetter = (ch) => /^[A-Za-z]$/.test(ch);
+
+    // DOM
+    const line1El = document.getElementById("line1");
+    const line2El = document.getElementById("line2");
+
+    const openedCountEl = document.getElementById("openedCount");
+    const totalCountEl = document.getElementById("totalCount");
+    const lastKeyEl = document.getElementById("lastKey");
+    const resultTextEl = document.getElementById("resultText");
+
+    const btnRevealAll = document.getElementById("btnRevealAll");
+    const btnReset = document.getElementById("btnReset");
+
+    const toastEl = document.getElementById("toast");
+    const toastTitleEl = document.getElementById("toastTitle");
+    const toastMsgEl = document.getElementById("toastMsg");
+
+    const hintContentEl = document.getElementById("hintContent");
+    const hintButtons = document.querySelectorAll("[data-hint]");
+
+    // State
+    let rev1 = [];
+    let rev2 = [];
+    let guessedSet = new Set();
+    let toastTimer = null;
+
+    function totalLettersCount() {
+      return TOK1.filter(isLetter).length + TOK2.filter(isLetter).length;
+    }
+    function openedLettersCount() {
+      let c = 0;
+      for (let i = 0; i < TOK1.length; i++) if (isLetter(TOK1[i]) && rev1[i]) c++;
+      for (let i = 0; i < TOK2.length; i++) if (isLetter(TOK2[i]) && rev2[i]) c++;
+      return c;
+    }
+
+    function showToast(type, title, msg) {
+      toastEl.classList.remove("ok", "wrong");
+      if (type === "ok") toastEl.classList.add("ok");
+      if (type === "wrong") toastEl.classList.add("wrong");
+
+      toastTitleEl.textContent = title;
+      toastMsgEl.textContent = msg;
+
+      toastEl.classList.add("show");
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toastEl.classList.remove("show"), 1700);
+    }
+
+    function updateStatus() {
+      openedCountEl.textContent = String(openedLettersCount());
+      totalCountEl.textContent = String(totalLettersCount());
+    }
+
+    function makeGap() {
+      const gap = document.createElement("div");
+      gap.className = "gap";
+      return gap;
+    }
+
+    function makeTile(ch, revealedRef, idx) {
+      if (isSpace(ch)) return makeGap();
+
+      const tile = document.createElement("div");
+      tile.className = "tile" + (revealedRef[idx] ? " revealed" : "");
+      tile.setAttribute("role", "button");
+      tile.setAttribute("tabindex", "0");
+
+      const charEl = document.createElement("div");
+      charEl.className = "char";
+      charEl.textContent = ch.toUpperCase();
+
+      const dash = document.createElement("div");
+      dash.className = "dash";
+
+      tile.appendChild(charEl);
+      tile.appendChild(dash);
+
+      // Toggle on click
+      tile.addEventListener("click", () => {
+        revealedRef[idx] = !revealedRef[idx];
+
+        render();
+        updateStatus();
+        checkWin();
+
+        if (revealedRef[idx]) {
+          showToast("ok", "OPEN", `Mở: ${ch.toUpperCase()}`);
+        } else {
+          showToast("info", "CLOSE", `Đóng: ${ch.toUpperCase()}`);
+          if (resultTextEl.textContent === PHRASE) resultTextEl.textContent = "—";
+        }
+      });
+
+      tile.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          tile.click();
+        }
+      });
+
+      return tile;
+    }
+
+    function render() {
+      line1El.innerHTML = "";
+      line2El.innerHTML = "";
+
+      for (let i = 0; i < TOK1.length; i++) {
+        line1El.appendChild(makeTile(TOK1[i], rev1, i));
+      }
+      for (let i = 0; i < TOK2.length; i++) {
+        line2El.appendChild(makeTile(TOK2[i], rev2, i));
+      }
+    }
+
+    function revealByGuess(letterAZ) {
+      let found = false;
+      let newlyOpened = 0;
+
+      for (let i = 0; i < TOK1.length; i++) {
+        const ch = TOK1[i];
+        if (!isLetter(ch)) continue;
+        if (ch.toUpperCase() === letterAZ) {
+          found = true;
+          if (!rev1[i]) { rev1[i] = true; newlyOpened++; }
+        }
+      }
+      for (let i = 0; i < TOK2.length; i++) {
+        const ch = TOK2[i];
+        if (!isLetter(ch)) continue;
+        if (ch.toUpperCase() === letterAZ) {
+          found = true;
+          if (!rev2[i]) { rev2[i] = true; newlyOpened++; }
+        }
+      }
+
+      return { found, newlyOpened };
+    }
+
+    function checkWin() {
+      if (openedLettersCount() === totalLettersCount()) {
+        resultTextEl.textContent = PHRASE;
+        showToast("ok", "DONE", "Hoàn thành! 🎉");
+      }
+    }
+
+    function revealAll() {
+      for (let i = 0; i < TOK1.length; i++) if (isLetter(TOK1[i])) rev1[i] = true;
+      for (let i = 0; i < TOK2.length; i++) if (isLetter(TOK2[i])) rev2[i] = true;
+
+      render();
+      updateStatus();
+      resultTextEl.textContent = PHRASE;
+      showToast("ok", "REVEAL", "Đã hiển thị toàn bộ đáp án.");
+    }
+
+    function resetGame() {
+      rev1 = TOK1.map(ch => isLetter(ch) ? false : true);
+      rev2 = TOK2.map(ch => isLetter(ch) ? false : true);
+
+      guessedSet = new Set();
+      lastKeyEl.textContent = "—";
+      resultTextEl.textContent = "—";
+
+      render();
+      updateStatus();
+      showToast("info", "RESET", "Đã reset trò chơi.");
+    }
+
+    // ===== Hint rendering =====
+    function setHintText(text) {
+      hintContentEl.innerHTML = `
+        <div style="width:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;">
+          <div>${escapeHTML(text)}</div>
+        </div>
+      `;
+    }
+
+    function setHintHorses() {
+      const horses = Array.from({ length: 10 }).map(() => {
+        return `<img class="horse-img" src="horse_hint.jpg" alt="Horse"/>`;
+      }).join("");
+      hintContentEl.innerHTML = `
+        <div style="width:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+          <div class="horse-row">${horses}</div>
+        </div>
+      `;
+    }
+
+    function escapeHTML(str) {
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    hintButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const key = btn.getAttribute("data-hint");
+        if (key === "1") {
+          setHintText("🐴🐴🐴🐴🐴🐴🐴🐴🐴🐴");
+          showToast("info", "HINT", "Gợi ý 1 đã hiển thị.");
+        } else if (key === "2") {
+          setHintText("Đây là một Thông điệp cho năm 2026");
+          showToast("info", "HINT", "Gợi ý 2 đã hiển thị.");
+        } else if (key === "3") {
+          setHintText("Chủ đề của bữa tiệc hôm nay");
+          showToast("info", "HINT", "Gợi ý 3 đã hiển thị.");
+        }
+      });
+    });
+
+    // Keyboard: A–Z
+    window.addEventListener("keydown", (e) => {
+      const k = e.key;
+      if (!k || k.length !== 1) return;
+
+      const upper = k.toUpperCase();
+      if (!/^[A-Z]$/.test(upper)) return;
+
+      lastKeyEl.textContent = upper;
+
+      const already = guessedSet.has(upper);
+      guessedSet.add(upper);
+
+      const { found, newlyOpened } = revealByGuess(upper);
+
+      if (!found) {
+        showToast("wrong", "WRONG", `Đoán sai: ${upper}`);
+        return;
+      }
+
+      render();
+      updateStatus();
+      checkWin();
+
+      if (newlyOpened > 0) {
+        showToast("ok", "OK", `Đúng! Mở ${newlyOpened} ô cho chữ: ${upper}`);
+      } else {
+        showToast("info", "INFO", already ? `Chữ ${upper} đã đoán rồi (đã mở hết).` : `Chữ ${upper} đã được mở hết rồi.`);
+      }
+    });
+
+    btnRevealAll.addEventListener("click", revealAll);
+    btnReset.addEventListener("click", resetGame);
+
+    // Init
+    resetGame();
+  </script>
+</body>
+
+</html>
