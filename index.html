@@ -23,256 +23,177 @@
             <nav class="nav" aria-label="Điều hướng chính">
                 <a class="active" href="#tin-tuc">Tin mới</a>
                 <a href="#binh-luan">Bình luận</a>
-                <a href="#tinh-nang">Tính năng</a>
-                <a href="#tai-app">Tải ứng dụng</a>
+                <a href="#quang-cao">Tính năng mới</a>
             </nav>
         </header>
 
-        <section class="hero">
-            <article class="hero-main">
-                <span class="hero-chip">Tin nóng hỏi</span>
-                <h2>Trang index theo phong cach forum, uu tien noi dung va thao luan.</h2>
-                <p>
-                    Giao diện này gom các bản tin về HiFPT, bài viết bình luận về trải nghiệm sử dụng
-                    và cụm giới thiệu tính năng trong bố cục hai cột sáng màu, tối giản và có độ tương phản rõ.
-                </p>
-                <div class="hero-actions">
-                    <a class="btn btn-primary" href="#tin-tuc">Xem bảng tin</a>
-                    <a class="btn btn-secondary" href="#tai-app">Mo QR tai app</a>
-                </div>
-                <div class="hero-stats">
-                    <div class="stat">
-                        <strong>03</strong>
-                        <span>Chủ đề chính: tin tức, bình luận, tính năng</span>
-                    </div>
-                    <div class="stat">
-                        <strong>Forum UI</strong>
-                        <span>Ưu tiên card nội dung, nhịp đọc rõ ràng</span>
-                    </div>
-                    <div class="stat">
-                        <strong>Light tone</strong>
-                        <span>Nền sáng, điểm nhấn cam nhạt và xanh trời</span>
-                    </div>
-                </div>
-            </article>
-
-            <aside class="hero-side">
-                <div class="banner-card">
-                    <img src="ass/img/banner-83.jpg" alt="Banner HiFPT">
-                    <div class="copy">
-                        <strong>Hi FPT đã cập nhật version 9.4.2</strong>
-                        <p>HiFPT đang được nhìn như một điểm chạm số tập trung vào quản lý mạng, hỗ trợ nhanh và chăm sóc tài khoản tại nhà.</p>
-                    </div>
-                </div>
-                <div class="mini-card">
-                    <h4>Luu y ve bo cuc</h4>
-                    <p>Phần trái là feed bài viết kiểu forum. Phần phải là sidebar gồm tính năng, khảo sát nhanh và khối tải ứng dụng.</p>
-                </div>
-            </aside>
+        <section class="hero" id="hero-section" aria-live="polite">
+            <p>Đang tải nội dung...</p>
         </section>
 
         <main class="content-grid">
             <section class="feed" id="tin-tuc">
                 <div class="section-head">
                     <div>
-                        <h3>Tin tức về HiFPT</h3>
-                        <p>Bảng tin chính được trình bày như các thread mở đầu để người đọc tiếp tục đi sâu.</p>
-                    </div>
-                    <div class="pill-group">
-                        <span class="tag hot">Dang theo doi</span>
-                        <span class="tag info">Cap nhat giao dien</span>
+                        <h3>Bài viết hot</h3>
+                        <p>Tin tức nóng hỏi dành cho cư dân mạng</p>
                     </div>
                 </div>
 
-                <div class="article-list">
-                    <article class="article-card">
-                        <img src="ass/img/ban-biet-hifpt-tu-dau.png" alt="Khảo sát HiFPT">
-                        <div class="article-body">
-                            <div class="meta-row">
-                                <span>Tin tong hop</span>
-                                <span>08:30</span>
-                                <span>Chu de: Nhan dien nguoi dung</span>
-                            </div>
-                            <h3>HiFPT được nhắc đến như một trung tâm quản lý Internet gia đình thay vì chỉ là ứng dụng hỗ trợ đơn lẻ.</h3>
-                            <p>
-                                Luồng nội dung đầu trang tập trung vào việc người dùng biết đến HiFPT từ đâu,
-                                qua đó cho thấy cách sản phẩm xuất hiện trong hành trình sử dụng Internet tại nhà.
-                            </p>
-                            <div class="article-footer">
-                                <a href="#binh-luan">Mở thảo luận</a>
-                                <span class="count">24 phan hoi</span>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="article-card">
-                        <img src="ass/img/banner-75.png" alt="Ứng dụng HiFPT">
-                        <div class="article-body">
-                            <div class="meta-row">
-                                <span>Goc san pham</span>
-                                <span>10:15</span>
-                                <span>Chu de: Trai nghiem su dung</span>
-                            </div>
-                            <h3>Xu hướng đọc nhanh thông tin dịch vụ, tra cứu hỗ trợ và thao tác quản lý ngay trên điện thoại đang định hình lại vai trò của HiFPT.</h3>
-                            <p>
-                                Thay vì giới thiệu quá dàn trải, giao diện forum tách từng ý thành thread rõ ràng:
-                                một bài cho tin mới, một bài cho bình luận, một bài cho tính năng cần chú ý.
-                            </p>
-                            <div class="article-footer">
-                                <a href="#tinh-nang">Xem danh sach tinh nang</a>
-                                <span class="count">18 luot luu</span>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="article-card" id="binh-luan">
-                        <img src="ass/img/ban-biet-hifpt-tu-daus.png" alt="Bình luận HiFPT">
-                        <div class="article-body">
-                            <div class="meta-row">
-                                <span>Bai viet binh luan</span>
-                                <span>13:40</span>
-                                <span>Chu de: Gia tri su dung</span>
-                            </div>
-                            <h3>Bình luận: điểm mạnh của HiFPT nằm ở cảm giác “mọi thứ trong một chỗ”, nhưng trải nghiệm chỉ thực sự tốt khi thông tin được trình bày gọn và dễ quét.</h3>
-                            <p>
-                                Đó là lý do giao diện mới dùng card sáng, nhiều khoảng trắng, chia nhóm thảo luận giống diễn đàn
-                                để người đọc vào là thấy ngay đâu là bài chính, đâu là phản hồi, đâu là công cụ tải app.
-                            </p>
-                            <div class="article-footer">
-                                <a href="#thread-noi-bat">Doc trao doi noi bat</a>
-                                <span class="count">31 binh luan</span>
-                            </div>
-                        </div>
-                    </article>
+                <div class="article-list" id="article-list" aria-live="polite">
+                    <p>Đang tải danh sách tin tức...</p>
                 </div>
 
                 <div class="section-head" id="thread-noi-bat" style="margin-top: 26px;">
                     <div>
-                        <h3>Thread bình luận nổi bật</h3>
-                        <p>Cách thể hiện mô phỏng thảo luận forum: bài gốc ngắn, dưới là phản hồi tiêu biểu.</p>
+                        <h3>Bình luận nổi bật</h3>
+                        <p>Xem nhanh các bình luận của người dùng về Hi FPT</p>
                     </div>
                 </div>
 
-                <div class="thread-list">
-                    <article class="thread-card">
-                        <div class="meta-row">
-                            <span>Chu de #104</span>
-                            <span>Người đọc quan tâm</span>
-                        </div>
-                        <h3>HiFPT nên ưu tiên việc gì trên trang chủ: hỗ trợ nhanh hay bảng điều khiển dịch vụ?</h3>
-                        <p>Ý kiến nổi bật nghiêng về việc đưa các thao tác thường dùng lên đầu, sau đó mới dẫn người dùng tới phần nội dung sâu hơn.</p>
-                        <div class="thread-links">
-                            <a class="thread-link" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">Mo bai viet tren Facebook</a>
-                            <a class="thread-link" href="https://news.vnexpress.net/" target="_blank" rel="noopener noreferrer">Mo bai viet tren website</a>
-                        </div>
-                        <div class="thread-comment">
-                            <strong>@minhthu</strong>
-                            <p>Neu la forum ve san pham, bai mo dau can cuc ky de doc. Phan thao tac nhanh nen xuat hien o sidebar de khong lam ngat mach doc tin.</p>
-                        </div>
-                        <div class="thread-comment">
-                            <strong>@khachhangfpt</strong>
-                            <p>Su khac biet cua layout nay la nhin vao la thay co nhom chu de. No hop voi noi dung binh luan hon landing page thuong.</p>
-                        </div>
-                    </article>
-
-                    <article class="thread-card">
-                        <div class="meta-row">
-                            <span>Chu de #117</span>
-                            <span>Tranh luan giao dien</span>
-                        </div>
-                        <h3>Vì sao tránh nền tối cho website về HiFPT?</h3>
-                        <p>Bối cảnh dịch vụ gia đình và bài viết dạng tin tức phù hợp với tông sáng, sạch, nhiều không khí hơn các kiểu giao diện tech tối màu quen thuộc.</p>
-                        <div class="thread-links">
-                            <a class="thread-link" href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">Mo bai viet tren LinkedIn</a>
-                            <a class="thread-link" href="https://medium.com/" target="_blank" rel="noopener noreferrer">Mo bai viet tren blog ngoai</a>
-                        </div>
-                        <div class="thread-comment">
-                            <strong>@anhkhoa</strong>
-                            <p>Nen sang giup hinh banner va logo HiFPT de tho hon. Cam nhat va xanh nhat van du de tao nhan ma khong bi gay.</p>
-                        </div>
-                    </article>
+                <div class="thread-list" id="thread-list" aria-live="polite">
+                    <p>Đang tải bình luận nổi bật...</p>
                 </div>
             </section>
 
-            <aside class="sidebar-stack">
-                <section class="feed" id="tinh-nang">
-                    <div class="section-head">
-                        <div>
-                            <h3>Tính năng HiFPT</h3>
-                            <p>Cụm tính năng trình bày như danh mục trong forum sidebar.</p>
-                        </div>
-                    </div>
-                    <div class="feature-list">
-                        <article class="feature-item">
-                            <div class="feature-icon">01</div>
-                            <div>
-                                <h4>Quản lý Internet tại nhà</h4>
-                                <p>Xem nhanh trạng thái dịch vụ, theo dõi kết nối và gom các thao tác quen thuộc vào một luồng dùng đơn giản.</p>
-                            </div>
-                        </article>
-                        <article class="feature-item">
-                            <div class="feature-icon">02</div>
-                            <div>
-                                <h4>Hỗ trợ và chăm sóc thuận tiện</h4>
-                                <p>Giữ vai trò như khu vực trợ giúp luôn sẵn sàng, phù hợp để đặt cạnh các bài viết bình luận và hỏi đáp.</p>
-                            </div>
-                        </article>
-                        <article class="feature-item">
-                            <div class="feature-icon">03</div>
-                            <div>
-                                <h4>Tich diem va nhan uu dai</h4>
-                                <p>Phần thưởng và quyền lợi được đưa vào như một chủ đề riêng, giúp website vừa có thông tin vừa có động lực khám phá.</p>
-                            </div>
-                        </article>
-                    </div>
-                </section>
-
-                <section class="poll-card">
-                    <h4>Khảo sát nhanh</h4>
-                    <p class="sidebar-note">Người xem trang chủ mới quan tâm nội dung nào nhất?</p>
-                    <div class="poll-option">
-                        <label><span>Tin tức cập nhật</span><span>48%</span></label>
-                        <div class="bar"><span style="width: 48%;"></span></div>
-                    </div>
-                    <div class="poll-option">
-                        <label><span>Bình luận trải nghiệm</span><span>32%</span></label>
-                        <div class="bar"><span style="width: 32%;"></span></div>
-                    </div>
-                    <div class="poll-option">
-                        <label><span>Tính năng nổi bật</span><span>20%</span></label>
-                        <div class="bar"><span style="width: 20%;"></span></div>
-                    </div>
-                </section>
-
-                <section class="download-card" id="tai-app">
-                    <h4>Tải HiFPT</h4>
-                    <p class="download-note">Khối tải app được giữ nổi bật nhưng không lấn át phần tin và phần thảo luận.</p>
-                    <div class="download-links">
-                        <a class="store" href="https://hi.fpt.vn/rev/lbq/736eyDgY" target="_blank" rel="noopener noreferrer">
-                            <img src="ass/img/appstore.png" alt="Tải trên App Store">
-                        </a>
-                        <a class="store" href="https://hi.fpt.vn/rev/lbq/736eyDgY" target="_blank" rel="noopener noreferrer">
-                            <img src="ass/img/google-play.png" alt="Tải trên Google Play">
-                        </a>
-                    </div>
-                    <div class="qr-box">
-                        <img src="ass/img/qr-code.png" alt="QR tải HiFPT">
-                        <p>Quét mã QR để mở nhanh trang tải ứng dụng. Phần này đóng vai trò như một widget tiện ích trong sidebar của forum.</p>
-                    </div>
-                </section>
-
-                <section class="mini-list">
-                    <article class="mini-card">
-                        <h4>Ghi chú thiết kế</h4>
-                        <p>Dùng khung bo tròn lớn, viền mảnh, màu nền kem sáng và nhấn cam để tách lớp rõ mà vẫn tối giản.</p>
-                    </article>
-                    <article class="mini-card soft-rose">
-                        <h4>Hướng phát triển tiếp</h4>
-                        <p>Nếu cần, có thể tách từng card thành trang chi tiết như một diễn đàn thật: danh sách chủ đề, bài chi tiết và phản hồi người dùng.</p>
-                    </article>
-                </section>
+            <aside class="sidebar-stack" id="quang-cao" aria-live="polite">
+                <p>Dang tai banner quang cao...</p>
             </aside>
         </main>
     </div>
+    <script src="ass/js/hero-data.js"></script>
+    <script src="ass/js/article-data.js"></script>
+    <script src="ass/js/thread-data.js"></script>
+    <script src="ass/js/sidebar-ads-data.js"></script>
+    <script>
+        const heroSection = document.getElementById("hero-section");
+        const articleList = document.getElementById("article-list");
+        const threadList = document.getElementById("thread-list");
+        const sidebarStack = document.getElementById("quang-cao");
+        const heroData = window.heroData || null;
+        const articleItems = window.articleItems || [];
+        const threadItems = window.threadItems || [];
+        const sidebarAdsData = window.sidebarAdsData || null;
+
+        function escapeHtml(value) {
+            return String(value).replace(/[&<>"']/g, (char) => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            }[char]));
+        }
+
+        function renderArticles(items) {
+            articleList.innerHTML = items.map((item) => `
+                <article class="article-card"${item.id ? ` id="${escapeHtml(item.id)}"` : ""}>
+                    <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.imageAlt)}">
+                    <div class="article-body">
+                        <div class="meta-row">
+                            <span>${escapeHtml(item.category)}</span>
+                            <span>${escapeHtml(item.time)}</span>
+                            <span>${escapeHtml(item.topic)}</span>
+                        </div>
+                        <h3>${escapeHtml(item.title)}</h3>
+                        <p>${escapeHtml(item.description)}</p>
+                        <div class="article-footer">
+                            <a href="${escapeHtml(item.linkHref)}">${escapeHtml(item.linkLabel)}</a>
+                            <span class="count">${escapeHtml(item.countLabel)}</span>
+                        </div>
+                    </div>
+                </article>
+            `).join("");
+        }
+
+        function renderHero(data) {
+            if (!data) {
+                heroSection.innerHTML = "<p>Khong co du lieu hero.</p>";
+                return;
+            }
+
+            heroSection.innerHTML = `
+                <article class="hero-main">
+                    <span class="hero-chip">${escapeHtml(data.chip)}</span>
+                    <h2>${escapeHtml(data.title)}</h2>
+                    <p>${escapeHtml(data.description)}</p>
+                    <div class="hero-actions">
+                        ${data.actions.map((action, index) => `
+                            <a class="btn ${index === 0 ? "btn-primary" : "btn-secondary"}" href="${escapeHtml(action.href)}">${escapeHtml(action.label)}</a>
+                        `).join("")}
+                    </div>
+                    <div class="hero-stats">
+                        ${data.stats.map((stat) => `
+                            <div class="stat">
+                                <strong>${escapeHtml(stat.value)}</strong>
+                                <span>${escapeHtml(stat.label)}</span>
+                            </div>
+                        `).join("")}
+                    </div>
+                </article>
+
+                <aside class="hero-side">
+                    <div class="banner-card">
+                        <img src="${escapeHtml(data.banner.image)}" alt="${escapeHtml(data.banner.imageAlt)}">
+                        <div class="copy">
+                            <strong>${escapeHtml(data.banner.title)}</strong>
+                            <p>${escapeHtml(data.banner.description)}</p>
+                        </div>
+                    </div>
+                    <div class="mini-card">
+                        <h4>${escapeHtml(data.note.title)}</h4>
+                        <p>${escapeHtml(data.note.description)}</p>
+                    </div>
+                </aside>
+            `;
+        }
+
+        function renderThreads(items) {
+            threadList.innerHTML = items.map((item) => `
+                <article class="thread-card">
+                    <div class="meta-row">
+                        <span>${escapeHtml(item.metaPrimary)}</span>
+                        <span>${escapeHtml(item.metaSecondary)}</span>
+                    </div>
+                    <h3>${escapeHtml(item.title)}</h3>
+                    <p>${escapeHtml(item.description)}</p>
+                    <p><a class="thread-link" href="${escapeHtml(item.sourceHref)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.sourceLabel)}</a></p>
+                    <div class="thread-links">
+                        ${item.links.map((link) => `
+                            <a class="thread-link" href="${escapeHtml(link.href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(link.label)}</a>
+                        `).join("")}
+                    </div>
+                    ${item.comments.map((comment) => `
+                        <div class="thread-comment">
+                            <strong>${escapeHtml(comment.author)}</strong>
+                            <p>${escapeHtml(comment.text)}</p>
+                        </div>
+                    `).join("")}
+                </article>
+            `).join("");
+        }
+
+        function renderSidebarAds(data) {
+            if (!Array.isArray(data) || data.length === 0) {
+                sidebarStack.innerHTML = "<p>Khong co banner quang cao.</p>";
+                return;
+            }
+
+            sidebarStack.innerHTML = `
+                <div class="sidebar-ad-list">
+                    ${data.map((item, index) => `
+                        <a class="banner-card sidebar-ad-card${index % 3 === 0 ? " sidebar-ad-card-wide" : ""}" href="${escapeHtml(item.href)}" target="_blank" rel="noopener noreferrer">
+                            <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.imageAlt)}">
+                        </a>
+                    `).join("")}
+                </div>
+            `;
+        }
+
+        renderHero(heroData);
+        renderArticles(articleItems);
+        renderThreads(threadItems);
+        renderSidebarAds(sidebarAdsData);
+    </script>
 </body>
 </html>
