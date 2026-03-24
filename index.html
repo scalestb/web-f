@@ -35,8 +35,8 @@
             <section class="feed" id="tin-tuc">
                 <div class="section-head">
                     <div>
-                        <h3>Bài viết hot</h3>
-                        <p>Tin tức nóng hỏi dành cho cư dân mạng</p>
+                        <h3>Bài viết gần đây</h3>
+                        <p>Tin tức dành cho cư dân mạng</p>
                     </div>
                 </div>
 
@@ -114,21 +114,13 @@
 
             heroSection.innerHTML = `
                 <article class="hero-main">
-                    <span class="hero-chip">${escapeHtml(data.chip)}</span>
-                    <h2>${escapeHtml(data.title)}</h2>
-                    <p>${escapeHtml(data.description)}</p>
-                    <div class="hero-actions">
-                        ${data.actions.map((action, index) => `
-                            <a class="btn ${index === 0 ? "btn-primary" : "btn-secondary"}" href="${escapeHtml(action.href)}">${escapeHtml(action.label)}</a>
-                        `).join("")}
-                    </div>
-                    <div class="hero-stats">
-                        ${data.stats.map((stat) => `
-                            <div class="stat">
-                                <strong>${escapeHtml(stat.value)}</strong>
-                                <span>${escapeHtml(stat.label)}</span>
-                            </div>
-                        `).join("")}
+                    <a class="hero-featured-media" href="${escapeHtml(data.titleHref || data.actions?.[0]?.href || "#")}">
+                        <img src="${escapeHtml(data.featured.image)}" alt="${escapeHtml(data.featured.imageAlt)}">
+                    </a>
+                    <div class="hero-main-copy">
+                        <span class="hero-chip">${escapeHtml(data.chip)}</span>
+                        <h2><a class="hero-title-link" href="${escapeHtml(data.titleHref || data.actions?.[0]?.href || "#")}">${escapeHtml(data.title)}</a></h2>
+                        <p>${escapeHtml(data.description)}</p>
                     </div>
                 </article>
 
