@@ -1,5 +1,15 @@
 window.heroData = [
     {
+        chip: "Hấp dẫn",
+        title: "Khách hàng thân thiết",
+        titleHref: "https://fpt.vn/khach-hang-than-thiet",
+        description: "Tích điểm dễ dàng, vô vàng ưu đãi",
+        featured: {
+            image: "ass/img/banner/khtt.png",
+            imageAlt: "Tích điểm dễ dàng, vô vàng ưu đãi"
+        }
+    },
+    {
         chip: "Hot News",
         title: "Thánh dự FTEL",
         titleHref: "https://ngoaihangnhacao.fpt.vn/",
