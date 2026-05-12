@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kế hoạch refactor luồng API Hợp đồng điện tử</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-soft: #0d1b2e;
+      --surface: #10233b;
+      --surface-2: #142b47;
+      --text: #f3f7fb;
+      --muted: #a9b8ca;
+      --line: rgba(255,255,255,.16);
+      --primary: #5dd6ff;
+      --success: #56d990;
+      --warning: #ffd166;
+      --danger: #ff6b6b;
+      --violet: #b197fc;
+      --card-radius: 24px;
+      --shadow: 0 24px 80px rgba(0,0,0,.34);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(93,214,255,.18), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(177,151,252,.15), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow: hidden;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .deck {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      padding: 58px 74px 84px;
+      overflow-y: auto;
+    }
+
+    .slide.active {
+      display: block;
+      animation: fadeSlide .28s ease-out both;
+    }
+
+    @keyframes fadeSlide {
+      from {
+        opacity: 0;
+        transform: translateY(14px) scale(.992);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .slide-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    .cover {
+      min-height: calc(100vh - 150px);
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--primary);
+      background: rgba(93,214,255,.08);
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      font-size: 13px;
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      font-size: clamp(46px, 6vw, 78px);
+      line-height: .98;
+      letter-spacing: -.055em;
+      margin: 0 0 24px;
+    }
+
+    h2 {
+      font-size: clamp(32px, 4vw, 52px);
+      line-height: 1.03;
+      letter-spacing: -.04em;
+      margin: 0 0 26px;
+    }
+
+    h3 {
+      font-size: 24px;
+      margin: 0 0 14px;
+      letter-spacing: -.02em;
+    }
+
+    p {
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1.65;
+      margin: 0 0 18px;
+    }
+
+    .lead {
+      max-width: 900px;
+      font-size: 24px;
+      line-height: 1.55;
+      color: #d7e4f3;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: #dce8f8;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .panel {
+      background: linear-gradient(145deg, rgba(20,43,71,.96), rgba(13,27,46,.96));
+      border: 1px solid var(--line);
+      border-radius: var(--card-radius);
+      box-shadow: var(--shadow);
+      padding: 28px;
+    }
+
+    .panel.light {
+      background: rgba(255,255,255,.07);
+      box-shadow: none;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: rgba(255,255,255,.065);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 22px;
+      min-height: 140px;
+    }
+
+    .card strong {
+      display: block;
+      font-size: 21px;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .card small,
+    .muted {
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 15px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 6px 10px;
+      margin: 0 6px 8px 0;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.08);
+    }
+
+    .tag.primary { color: var(--primary); }
+    .tag.success { color: var(--success); }
+    .tag.warning { color: var(--warning); }
+    .tag.danger { color: var(--danger); }
+    .tag.violet { color: var(--violet); }
+
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      gap: 12px;
+      margin: 26px 0;
+    }
+
+    .flow.vertical {
+      flex-direction: column;
+      max-width: 640px;
+    }
+
+    .node {
+      min-width: 160px;
+      flex: 1;
+      background: rgba(255,255,255,.08);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px 18px;
+      position: relative;
+      color: var(--text);
+    }
+
+    .node.center {
+      text-align: center;
+    }
+
+    .node .label {
+      display: block;
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .node .desc {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .node.api { border-color: rgba(93,214,255,.45); background: rgba(93,214,255,.1); }
+    .node.action { border-color: rgba(255,209,102,.5); background: rgba(255,209,102,.1); }
+    .node.success { border-color: rgba(86,217,144,.5); background: rgba(86,217,144,.1); }
+    .node.danger { border-color: rgba(255,107,107,.5); background: rgba(255,107,107,.1); }
+    .node.violet { border-color: rgba(177,151,252,.5); background: rgba(177,151,252,.1); }
+
+    .arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 28px;
+      min-width: 28px;
+      font-weight: 800;
+    }
+
+    .branch-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .branch {
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      padding: 22px;
+    }
+
+    .branch .branch-title {
+      font-size: 22px;
+      font-weight: 900;
+      margin-bottom: 14px;
+    }
+
+    .branch.pay .branch-title { color: var(--warning); }
+    .branch.update .branch-title { color: var(--primary); }
+    .branch.confirm .branch-title { color: var(--success); }
+
+    .timeline {
+      display: grid;
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 18px;
+      align-items: start;
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.055);
+    }
+
+    .timeline-item .version {
+      color: var(--primary);
+      font-weight: 900;
+      font-size: 20px;
+    }
+
+    ul {
+      margin: 12px 0 0;
+      padding-left: 20px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    li strong {
+      color: var(--text);
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 18px;
+      font-size: 15px;
+      background: rgba(255,255,255,.045);
+      border: 1px solid var(--line);
+    }
+
+    .table th,
+    .table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .table th {
+      color: #d7eaff;
+      background: rgba(93,214,255,.1);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .table td {
+      color: var(--muted);
+    }
+
+    .code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-size: 14px;
+      color: #e7f4ff;
+      background: rgba(0,0,0,.24);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      overflow: auto;
+      line-height: 1.55;
+      white-space: pre;
+    }
+
+    .db-diagram {
+      display: grid;
+      grid-template-columns: 1fr 120px 1fr;
+      align-items: center;
+      gap: 18px;
+      margin-top: 28px;
+    }
+
+    .db-box {
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      padding: 24px;
+    }
+
+    .db-box h3 {
+      color: var(--primary);
+    }
+
+    .db-link {
+      text-align: center;
+      color: var(--primary);
+      font-size: 44px;
+      font-weight: 900;
+    }
+
+    .footer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 24px;
+      background: rgba(7,17,31,.8);
+      border-top: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+      z-index: 20;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 15px;
+      background: rgba(255,255,255,.09);
+      color: var(--text);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: rgba(93,214,255,.18);
+      border-color: rgba(93,214,255,.45);
+    }
+
+    .progress {
+      flex: 1;
+      height: 8px;
+      background: rgba(255,255,255,.08);
+      border-radius: 999px;
+      overflow: hidden;
+      max-width: 420px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary), var(--success));
+      border-radius: 999px;
+      transition: width .2s ease;
+    }
+
+    .slide-count {
+      min-width: 86px;
+      text-align: right;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .mini-note {
+      border-left: 4px solid var(--primary);
+      padding: 14px 18px;
+      background: rgba(93,214,255,.08);
+      border-radius: 0 16px 16px 0;
+      color: #d8ebff;
+      line-height: 1.6;
+      font-size: 16px;
+      margin-top: 18px;
+    }
+
+    .decision {
+      width: 210px;
+      min-height: 120px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      margin: 0 auto;
+      transform: rotate(45deg);
+      border: 1px solid rgba(255,209,102,.55);
+      background: rgba(255,209,102,.1);
+      border-radius: 18px;
+    }
+
+    .decision span {
+      transform: rotate(-45deg);
+      display: block;
+      font-weight: 900;
+      color: var(--warning);
+      padding: 20px;
+    }
+
+    .split-layout {
+      display: grid;
+      grid-template-columns: .95fr 1.05fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .badge-number {
+      width: 38px;
+      height: 38px;
+      display: inline-grid;
+      place-items: center;
+      background: rgba(93,214,255,.13);
+      border: 1px solid rgba(93,214,255,.34);
+      border-radius: 12px;
+      color: var(--primary);
+      font-weight: 900;
+      margin-right: 10px;
+    }
+
+    @media (max-width: 980px) {
+      html, body { overflow: auto; }
+      .deck { height: auto; min-height: 100vh; }
+      .slide {
+        position: relative;
+        display: block !important;
+        padding: 34px 20px 72px;
+        min-height: auto;
+        border-bottom: 1px solid var(--line);
+      }
+      .footer { display: none; }
+      .cover,
+      .grid-2,
+      .grid-3,
+      .grid-4,
+      .branch-grid,
+      .db-diagram,
+      .split-layout {
+        grid-template-columns: 1fr;
+      }
+      .db-link { transform: rotate(90deg); }
+      .flow { flex-direction: column; }
+      .arrow { transform: rotate(90deg); }
+      .timeline-item { grid-template-columns: 1fr; }
+      h1 { font-size: 42px; }
+      h2 { font-size: 34px; }
+    }
+
+    @media print {
+      html, body {
+        overflow: visible;
+        background: #fff;
+        color: #111;
+      }
+      .slide {
+        position: relative;
+        display: block !important;
+        page-break-after: always;
+        min-height: 100vh;
+        padding: 40px;
+        background: #fff;
+        color: #111;
+      }
+      .panel,
+      .card,
+      .branch,
+      .node,
+      .db-box,
+      .timeline-item {
+        background: #fff !important;
+        color: #111 !important;
+        border-color: #bbb !important;
+        box-shadow: none !important;
+      }
+      p, .muted, .card small, .node .desc, td, ul {
+        color: #333 !important;
+      }
+      .footer { display: none; }
+      .tag, .eyebrow {
+        border-color: #bbb;
+        background: #f5f5f5;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" id="deck">
+    <section class="slide active">
+      <div class="slide-inner cover">
+        <div>
+          <div class="eyebrow">E-Contract Refactor Plan</div>
+          <h1>Phân tách API & chuẩn hóa luồng ký Hợp đồng điện tử</h1>
+          <p class="lead">
+            Tách các API ra theo đúng nghiệp vụ và chuẩn hóa database lưu thông tin Biên bản điện tử
+            <strong>econtract_transactions</strong> và lưu vết bằng <strong>econtract_tracking</strong>.
+          </p>
+          <div class="meta-row">
+            <span class="pill">v9.5.2: tách api info</span>
+            <span class="pill">v9.6: tách api confirm</span>
+            <span class="pill">Tối ưu database</span>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Mục tiêu chính</h3>
+          <div class="flow vertical">
+            <div class="node api"><span class="label">view</span><span class="desc">Chỉ trả thông tin biên bản</span></div>
+            <div class="node action"><span class="label">view-action</span><span class="desc">Điều phối PAY / UPDATE_ID_CARD / CONFIRM</span></div>
+            <div class="node violet"><span class="label">check-verification</span><span class="desc">Trạng thái xác thực và loại xác thực</span></div>
+            <div class="node success"><span class="label">sign</span><span class="desc">Nhiệm vụ duy nhất: ký biên bản</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="eyebrow">Bối cảnh hiện tại</div>
+        <h2>Vấn đề cần xử lý</h2>
+        <div class="grid-2">
+          <div class="panel">
+            <h3>Về API</h3>
+            <ul>
+              <li>Một api phải xử lý nhiều nghiệp vụ</li>
+              <li>Nghiệp vụ xử lý chồng chéo, gọi api 3rd nhiều lần</li>
+              <li>Khó khăn trong việc kiểm tra và debug</li>
+              <li>Khó khăn trong việc lưu vết database</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>Về Database</h3>
+            <ul>
+              <li>Chưa đáp ứng việc lưu thông tin biên bản</li>
+              <li>Đang phần mảng nhiều table cho econtract</li>
+              <li>Khó check dữ liệu</li>
+              <li>Khai báo nhiều cột không cần thiết, lang mang</li>
+              <li>Khó mở rộng</li>
+            </ul>
+          </div>
+        </div>
+        <div class="mini-note">
+          Hướng refactor: tách API theo từng nghiệp vụ, trách nhiệm, lưu vết từng bước và lịch sử thay đổi trong quá trình kí BBDT.
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="eyebrow">v9.5.2</div>
+        <h2>Tách API <code>info</code> thành <code>view</code> và <code>view-action</code></h2>
+
+        <div class="flow">
+          <div class="node center api"><span class="label">Mở chức năng ký HDDT</span><span class="desc">APP / WEB</span></div>
+          <div class="arrow">→</div>
+          <div class="node center api"><span class="label">view</span><span class="desc">Lấy thông tin biên bản</span></div>
+          <div class="arrow">→</div>
+          <div class="node center action"><span class="label">view-action</span><span class="desc">Lấy điều hướng xử lý</span></div>
+        </div>
+
+        <div class="branch-grid">
+          <div class="branch pay">
+            <div class="branch-title">PAY</div>
+            <p>App điều hướng sang luồng thanh toán. Sau khi thanh toán thành công, quay lại bước mở luồng xem biên bản.</p>
+          </div>
+          <div class="branch update">
+            <div class="branch-title">UPDATE_ID_CARD</div>
+            <p>App mở màn hình cập nhật CCCD, gọi <code>update_id_card</code>, sau đó đi tiếp qua luồng xác thực biên bản (check-verification).</p>
+          </div>
+          <div class="branch confirm">
+            <div class="branch-title">CONFIRM</div>
+            <p>App gọi <code>luồng xác thực biên bản (check-verification)</code> để kiểm tra điều kiện xác thực trước khi ký.</p>
+          </div>
+        </div>
+
+        <div class="mini-note">
+          <strong>view</strong> không xử lý nghiệp vụ điều hướng. <strong>view-action</strong> là nơi quyết định text note, button và hướng đi tiếp.
+        </div>
+      </div>
+    </section>
+
+
+
+
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="eyebrow">v9.6</div>
+        <h2>Tách API <code>confirm</code> thành <code>check-verification</code> và <code>sign</code></h2>
+
+        <div class="flow">
+          <div class="node api center"><span class="label">CONFIRM</span><span class="desc">Từ view-action</span></div>
+          <div class="arrow">→</div>
+          <div class="node violet center"><span class="label">check-verification</span><span class="desc">Kiểm tra điều kiện xác thực</span></div>
+          <div class="arrow">→</div>
+          <div class="node success center"><span class="label">sign</span><span class="desc">Chỉ ký</span></div>
+        </div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <h3>Output khi đủ điều kiện</h3>
+            <div class="code">{
+  "success": true,
+  "verification_type": "VNEID | OTP | NONE"
+}</div>
+          </div>
+          <div class="panel">
+            <h3>Output khi chưa đủ điều kiện</h3>
+            <div class="code">{
+  "success": false,
+  "verification_type": "OTP | VNEID | NONE"
+}</div>
+          </div>
+        </div>
+
+        <div class="mini-note">
+          <code>Nếu <code>check-verification.success = true</code> thì mới gọi <code>sign</code>.
+        </div>
+      </div>
+    </section>
+
+
+
+
+
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="eyebrow">Flow tổng quan</div>
+        <h2>Sơ đồ xử lý chính</h2>
+
+        <div class="panel">
+          <div class="flow">
+            <div class="node api center">
+              <span class="label">1. Mở Ký HDDT</span>
+              <span class="desc">view</span>
+              <span class="desc">view-action</span>
+            </div>
+            <div class="arrow">→</div>
+            <div class="node api center">
+              <span class="label">2. Kiểm tra tình trạng xác thực</span>
+              <span class="desc">check-verification</span>
+              <span class="desc">otp-active</span>
+              <span class="desc">vneid-status</span>
+            </div>
+            <div class="arrow">→</div>
+            <div class="node action center">
+              <span class="label">3. Kí BBDT</span>
+              <span class="desc">sign</span></div>
+          </div>
+
+          <div class="grid-3">
+            <div class="card">
+              <strong>Lấy điều hướng</strong>
+              <small>Mở thanh toán</small><br/>
+              <small>Cập nhật CCCD</small><br/>
+              <small>Đi kiểm tra tình trạng xác thực</small>
+            </div>
+            <div class="card">
+              <strong>Check xác thực</strong>
+              <small>Xác thực OTP</small><br/>
+              <small>Xác thực VNEID</small><br/>
+              <small>Không cần xác thực</small>
+            </div>
+            <div class="card">
+              <strong>Kí</strong>
+              <small>Kiểm tra đã xác thực thành công thì kí</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="eyebrow">Luồng cập nhật CCCD</div>
+        <h2>view-action trả về : UPDATE_ID_CARD</h2>
+
+        <div class="split-layout">
+          <div class="panel">
+            <h3>API sử dụng</h3>
+            <div class="flow vertical">
+              <div class="node api"><span class="label">update_id_card</span><span class="desc">Input: contractNo, guid, idCard</span></div>
+              <div class="node action"><span class="label">Return: success, popup</span><span class="desc">Thông báo nhập thành công hoặc popup không đúng</span></div>
+              <div class="node violet"><span class="label">Thành công thì app gọi api check xác thực</span><span class="desc">Chỉ xử lý đúng nhiệm vụ là cập nhật CCCD</span></div>
+            </div>
+          </div>
+          <div class="panel">
+            <h3>Ý nghĩa</h3>
+            <ul>
+              <li>Không điều hướng trong api cập nhật CCCD.</li>
+              <li>Chỉ làm đúng nhiệm vụ là Cập nhật CCCD</li>
+              <li>Ghi log vào <code>econtract_tracking</code> với step <strong> Cập nhật CCCD</strong>.</li>
+            </ul>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="eyebrow">Luồng OTP</div>
+        <h2>Xác thực OTP</h2>
+
+        <div class="panel">
+          <div class="flow">
+            <div class="node violet center"><span class="label">check-verification</span><span class="desc">success = false<br/>verification_type = OTP</span></div>
+            <div class="arrow">→</div>
+            <div class="node api center"><span class="label">otp-send</span><span class="desc">Gửi OTP</span></div>
+            <div class="arrow">→</div>
+            <div class="node api center"><span class="label">otp-active</span><span class="desc">Nhập OTP để xác thực</span></div>
+            <div class="arrow">→</div>
+            <div class="node action center"><span class="label">Quay lại check-verification</span><span class="desc">Kiểm tra lại điều kiện</span></div>
+          </div>
+        </div>
+        <br/>
+        <div class="grid-2">
+          <div class="card">
+            <strong>Thành công</strong>
+            <small>Cập nhật DB: step = VERIFIED, verification_type = OTP, verification_status = SUCCESS.</small>
+          </div>
+          <div class="card">
+            <strong>Không thành công</strong>
+            <small>Có thể gọi otp-resend, sau đó quay lại otp-active.</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="eyebrow">Luồng VNEID</div>
+        <h2>Xác thực VNEID</h2>
+
+        <div class="panel">
+          <div class="flow">
+            <div class="node violet center"><span class="label">check-verification</span><span class="desc">success = false<br/>verification_type = VNEID</span></div>
+            <div class="arrow">→</div>
+            <div class="node api center"><span class="label">vneid-status</span><span class="desc">Check trạng thái</span></div>
+          </div>
+
+          <div class="grid-4">
+            <div class="card">
+              <span class="tag primary">CREATE</span>
+              <strong>Mở app VNEID</strong>
+              <small>Đẩy khách hàng sang app/link VNEID để xác thực.</small>
+            </div>
+            <div class="card">
+              <span class="tag warning">PENDING</span>
+              <strong>Chờ xác thực</strong>
+              <small>Popup: nhập lại CCCD hoặc mở lại link VNEID.</small>
+            </div>
+            <div class="card">
+              <span class="tag success">SUCCESS</span>
+              <strong>Load lại biên bản</strong>
+              <small>Quay lại view/view-action để khách bấm xác nhận.</small>
+            </div>
+            <div class="card">
+              <span class="tag danger">FAILED</span>
+              <strong>Màn hình thất bại</strong>
+              <small>Hiển thị lý do failed tương ứng.</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="eyebrow">VNEID failed mapping</div>
+        <h2>Các case thất bại cần hiển thị rõ</h2>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Case</th>
+              <th>Ý nghĩa</th>
+              <th>Hành động đề xuất</th>
+              <th>Tracking</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>FAILED 1</strong></td>
+              <td>Chưa định danh cấp 1 hoặc thông tin không đúng</td>
+              <td>Cho nhập lại CCCD hoặc chuyển OTP theo rule</td>
+              <td>FAILED_INVALID_ID</td>
+            </tr>
+            <tr>
+              <td><strong>FAILED 2</strong></td>
+              <td>Khách hàng không đồng ý chia sẻ</td>
+              <td>Show thông báo và cho chuyển OTP nếu hợp lệ</td>
+              <td>FAILED_NOT_ACCEPT</td>
+            </tr>
+            <tr>
+              <td><strong>FAILED 3</strong></td>
+              <td>Khách hàng chưa đủ 15 tuổi</td>
+              <td>Không cho tiếp tục VNEID</td>
+              <td>FAILED_UNDER_15</td>
+            </tr>
+            <tr>
+              <td><strong>FAILED 4</strong></td>
+              <td>Hết thời gian xác thực</td>
+              <td>Mở lại link VNEID hoặc nhập lại CCCD</td>
+              <td>TIMEOUT</td>
+            </tr>
+            <tr>
+              <td><strong>FAILED 5</strong></td>
+              <td>Lỗi khác</td>
+              <td>Show lỗi chung và ghi log raw response</td>
+              <td>FAILED</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="eyebrow">Database tracking</div>
+        <h2>Thiết kế 2 bảng mới</h2>
+
+        <div class="db-diagram">
+          <div class="db-box">
+            <h3>econtract_transactions (bảng A)</h3>
+            <p>Trạng thái hiện tại của một luồng xử lý.</p>
+            <ul>
+              <li><strong>guid</strong></li>
+              <li><strong>template_id</strong></li>
+              <li><strong>contract_no</strong></li>
+              <li><strong>phone</strong></li>
+              <li><strong>step</strong>: OPEN / UPDATE_ID / VERIFICATING / VERIFIED / SIGNED</li>
+              <li><strong>initial_verification_type</strong>: OTP / VNEID / NONE</li>
+              <li><strong>verification_type</strong>: OTP / VNEID / NONE</li>
+              <li><strong>verification_status</strong>: PENDING / SUCCESS / FAILED</li>
+              <li><strong>platform</strong>: WEB / APP</li>
+            </ul>
+          </div>
+          <div class="db-link">1 → N</div>
+          <div class="db-box">
+            <h3>econtract_tracking (bảng B)</h3>
+            <p>Lịch sử hành động và dữ liệu phát sinh.</p>
+            <ul>
+              <li><strong>econtract_transaction_id</strong></li>
+              <li><strong>step</strong>: Xem Biên bản / Cập nhật CCCD / Xác thực OTP / Xác thực VNEID / By pass OTP /  Xác thực thành công / Đổi phương thức xác thực / Xác thực lỗi / Ký thành công...</li>
+              <li><strong>date_action</strong></li>
+              <li><strong>data</strong>: JSON/text snapshot (lưu thông tin lấy từ 3rd check điều kiện vneid, lưu thông tin tạo transaction vneid, xác thực, thông tin by pass OTP, ...)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="eyebrow">Mapping database</div>
+        <h2>Mỗi bước xử lý ghi nhận như thế nào?</h2>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Luồng</th>
+              <th>econtract_transactions</th>
+              <th>econtract_tracking</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Mở view</td>
+              <td>Nếu chưa có row: tạo step = OPEN</td>
+              <td>Insert step = Xem biên bản, platform = WEB / APP</td>
+            </tr>
+            <tr>
+              <td>Cập nhật CCCD</td>
+              <td>step = UPDATE_ID</td>
+              <td>Insert step = Cập nhật CCCD, data : idCard</td>
+            </tr>
+            <tr>
+              <td>Mở OTP</td>
+              <td>step = VERIFICATING, verification_type = OTP</td>
+              <td>Insert step = OTP_SEND / OTP_ACTIVE</td>
+            </tr>
+            <tr>
+              <td>OTP thành công</td>
+              <td>step = VERIFIED, verification_status = SUCCESS</td>
+              <td>Insert step = OTP_SUCCESS</td>
+            </tr>
+            <tr>
+              <td>Mở VNEID</td>
+              <td>step = VERIFICATING, verification_type = VNEID</td>
+              <td>Insert transactionLink, transactionCode, status</td>
+            </tr>
+            <tr>
+              <td>Check verification</td>
+              <td>success true → VERIFIED, false → VERIFICATING</td>
+              <td>Insert step = Tình trạng xác thực, data từ 3rd</td>
+            </tr>
+            <tr>
+              <td>Ký thành công</td>
+              <td>step = SIGNED</td>
+              <td>Insert step = Kí thành công, platform = WEB / APP</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="eyebrow">Case phát sinh</div>
+        <h2>Cách xử lý các tình huống thay đổi giữa luồng</h2>
+
+        <div class="grid-3">
+          <div class="panel">
+            <span class="tag warning">Bypass</span>
+            <h3>Nhân viên chuyển VNEID → OTP</h3>
+            <ul>
+              <li>Update bảng A: verification_type = OTP.</li>
+              <li>Insert bảng B: By pass OTP.</li>
+              <li>Ghi rõ người thao tác và thời điểm.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <span class="tag violet">3rd changed</span>
+            <h3>Dữ liệu ISC/SPF thay đổi</h3>
+            <ul>
+              <li>So sánh dữ liệu hiện tại với dữ liệu đã lưu.</li>
+              <li>Insert bảng B: Có thay đổi giá trị từ 3rd.</li>
+              <li>Update verification_type nếu rule thay đổi.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <span class="tag danger">VNEID failed</span>
+            <h3>VNEID thất bại</h3>
+            <ul>
+              <li>Map đúng failed case.</li>
+              <li>Update bảng A: verification_status = FAILED.</li>
+              <li>Insert bảng B với raw response cần thiết.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="eyebrow">Roadmap</div>
+        <h2>Lộ trình triển khai đề xuất</h2>
+
+        <div class="timeline">
+          <div class="timeline-item">
+
+            <div class="version">Phase 1 (v9.5.2)</div>
+            <div>
+              <h3>Tách <code>info</code> thành <code>view</code> và <code>view-action</code></h3>
+              <p><code>view</code> chỉ show dữ liệu. <code>view-action</code>  trả điều hướng xử lý.</p>
+            </div>
+            
+          </div>
+
+          <div class="timeline-item">
+            <div class="version">Phase 2 (v9.6)</div>
+            <div>
+              <h3> Tách <code>confirm</code></h3>
+              <p>Tạo <code>update_id_card ver 2</code> chỉ trả về thành công hoặc lỗi -> điều hướng xác thực quy về check-verification.</p>
+              <p>Tách <code>confirm</code> thành <code>check-verification</code>, <code>vneid-status</code>, <code>otp-send</code>, <code>otp-active</code>, <code>sign</code>.</p>
+              <p>Tạo table database mới</p>
+            </div>
+          </div>
+
+
+          <div class="timeline-item">
+            <div class="version">Phase 3</div>
+            
+            <div>
+              <h3>Thống kê số liệu và báo cáo từ database mới</h3>
+              <p>Xem database mới lưu thông tin chuẩn và đầy đủ chưa</p>
+            </div>
+          </div>
+          
+          <div class="timeline-item">
+            <div class="version">Phase 4</div>
+            <div>
+              <h3>Cập nhật dữ liệu báo cáo</h3>
+              <p>Gửi phòng vận hành và Hi admin query database mới, bỏ query cũ</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="version">Phase 5</div>
+            <div>
+              <h3>Bỏ route và database cũ</h3>
+              <p>Sau khi theo dõi đủ dữ liệu và không còn lỗi production, bỏ dần bảng cũ và route cũ.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="eyebrow">API contract đề xuất</div>
+        <h2>Danh sách API sau refactor</h2>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th>API</th>
+              <th>Nhiệm vụ</th>
+              <th>Có gì mới hơn bản cũ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>view</code></td>
+              <td>Lấy thông tin biên bản để hiển thị</td>
+              <td>Phân tách thực hiện nhiệm vụ nhất định</td>
+            </tr>
+            <tr>
+              <td><code>view-action</code></td>
+              <td>Trả điều hướng xử lý</td>
+              <td>Phân tách thực hiện nhiệm vụ nhất định</td>
+            </tr>
+            <tr>
+              <td><code>update_id_card v2</code></td>
+              <td>Cập nhật CCCD</td>
+              <td>Chỉ làm đúng nhiệm vụ cập nhật CCCD, không nhận nhiệm vụ điều hướng xác thực</td>
+            </tr>
+            <tr>
+              <td><code>check-verification</code></td>
+              <td>Phân luồng xác thực</td>
+              <td>Đảm nhận vai trò cầu nối giữa các nguồn xác thực và thao tác kí</td>
+            </tr>
+            <tr>
+              <td><code>vneid-status</code></td>
+              <td>Luồng xác thực VNEID</td>
+              <td>Chỉ đảm nhận đúng nhiệm vụ là xác thực VNEID</td>
+            </tr>
+            <tr>
+              <td><code>otp-send</code></td>
+              <td>Gửi OTP</td>
+              <td>BE nhận được tính hiệu chủ động để gửi OTP cho khách hàng</td>
+            </tr>
+            <tr>
+              <td><code>otp-active</code></td>
+              <td>Xác thực OTP</td>
+              <td>Chỉ đảm nhận đúng nhiệm vụ là xác thực qua OTP</td>
+            </tr>
+            <tr>
+              <td><code>sign</code></td>
+              <td>Chỉ ký biên bản</td>
+              <td>Chỉ đảm nhận đúng nhiệm vụ là Kí BB</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="eyebrow">Kết luận</div>
+        <h2>Nguyên tắc chốt khi triển khai</h2>
+
+        <div class="grid-2">
+          <div class="panel">
+            <h3>Nguyên tắc API</h3>
+            <ul>
+              <li><strong>view</strong> chỉ xem.</li>
+              <li><strong>view-action</strong> chỉ điều hướng.</li>
+              <li><strong>update_id_card v2</strong> chỉ cập nhật CCCD.</li>
+              <li><strong>check-verification</strong> chỉ kiểm tra điều kiện xác thực.</li>
+              <li><strong>vneid-status</strong> chỉ xử lý xác thực VNEID</li>
+              <li><strong>otp-active</strong> chỉ xử lý xác thực OTP</li>
+              <li><strong>sign</strong> chỉ ký.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>Nguyên tắc Database</h3>
+            <ul>
+              <li><strong>econtract_transactions</strong> là trạng thái hiện tại.</li>
+              <li><strong>econtract_tracking</strong> là lịch sử xử lý.</li>
+              <li>Trong giai đoạn đầu, ghi song song với table cũ.</li>
+              <li>Khi ổn định, chỉ lưu ở bảng mới.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="mini-note">
+          Sau refactor, khi cần debug một hợp đồng, chỉ cần xem transaction hiện tại và tracking timeline là biết khách hàng đang đứng ở bước nào, lỗi ở đâu và API nào đã xử lý.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="controls">
+      <button id="prevBtn">← Trước</button>
+      <button id="nextBtn">Tiếp →</button>
+      <button id="printBtn">In / PDF</button>
+    </div>
+    <div class="progress" aria-label="Slide progress">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="slide-count" id="slideCount">1 / 15</div>
+  </footer>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const printBtn = document.getElementById("printBtn");
+    const progressBar = document.getElementById("progressBar");
+    const slideCount = document.getElementById("slideCount");
+    let current = 0;
+
+    function showSlide(index) {
+      current = Math.max(0, Math.min(index, slides.length - 1));
+      slides.forEach((slide, i) => slide.classList.toggle("active", i === current));
+      const progress = ((current + 1) / slides.length) * 100;
+      progressBar.style.width = progress + "%";
+      slideCount.textContent = `${current + 1} / ${slides.length}`;
+      window.location.hash = `slide-${current + 1}`;
+    }
+
+    function next() { showSlide(current + 1); }
+    function prev() { showSlide(current - 1); }
+
+    prevBtn.addEventListener("click", prev);
+    nextBtn.addEventListener("click", next);
+    printBtn.addEventListener("click", () => window.print());
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " ") next();
+      if (event.key === "ArrowLeft" || event.key === "PageUp") prev();
+      if (event.key === "Home") showSlide(0);
+      if (event.key === "End") showSlide(slides.length - 1);
+    });
+
+    const match = window.location.hash.match(/slide-(\d+)/);
+    if (match) {
+      showSlide(Number(match[1]) - 1);
+    } else {
+      showSlide(0);
+    }
+  </script>
+</body>
+</html>
