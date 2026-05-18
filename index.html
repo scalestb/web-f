@@ -53,6 +53,7 @@
                 <div class="post-grid" id="article-list" aria-live="polite">
                     <p>Đang tải danh sách bài viết...</p>
                 </div>
+                <div class="pagination" id="article-pagination" aria-label="Phan trang bai viet"></div>
             </section>
         </main>
 
@@ -77,8 +78,10 @@
     <script>
         const heroSection = document.getElementById("hero-section");
         const articleList = document.getElementById("article-list");
+        const articlePagination = document.getElementById("article-pagination");
         const heroData = window.heroData || null;
         const articleItems = window.articleItems || [];
+        const ARTICLE_PAGE_SIZE = 15;
         let heroSlides = [];
         let currentHeroIndex = 0;
         let heroTimer = null;
@@ -220,8 +223,93 @@
             `).join("");
         }
 
+        function getArticlePageCount(items) {
+            return Math.max(1, Math.ceil(items.length / ARTICLE_PAGE_SIZE));
+        }
+
+        function getArticlePageIndexFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            const page = Number.parseInt(params.get("page") || "1", 10);
+
+            if (!Number.isFinite(page) || page < 1) {
+                return 0;
+            }
+
+            return page - 1;
+        }
+
+        function setArticlePageInUrl(pageIndex, replaceState = false) {
+            const url = new URL(window.location.href);
+            url.searchParams.set("page", String(pageIndex + 1));
+
+            if (replaceState) {
+                window.history.replaceState({ articlePageIndex: pageIndex }, "", url);
+                return;
+            }
+
+            window.history.pushState({ articlePageIndex: pageIndex }, "", url);
+        }
+
+        function renderArticlePagination(pageIndex, pageCount) {
+            if (pageCount <= 1) {
+                articlePagination.innerHTML = "";
+                return;
+            }
+
+            const safePageIndex = Math.min(Math.max(pageIndex, 0), pageCount - 1);
+
+            articlePagination.innerHTML = `
+                <button class="pagination-btn" type="button" data-page="${safePageIndex - 1}" ${safePageIndex === 0 ? "disabled" : ""}>
+                    Trang truoc
+                </button>
+                <div class="pagination-pages" role="list" aria-label="Danh sach trang">
+                    ${Array.from({ length: pageCount }, (_, index) => `
+                        <button
+                            class="pagination-btn${index === safePageIndex ? " active" : ""}"
+                            type="button"
+                            data-page="${index}"
+                            aria-current="${index === safePageIndex ? "page" : "false"}">
+                            ${index + 1}
+                        </button>
+                    `).join("")}
+                </div>
+                <button class="pagination-btn" type="button" data-page="${safePageIndex + 1}" ${safePageIndex === pageCount - 1 ? "disabled" : ""}>
+                    Trang sau
+                </button>
+            `;
+
+            articlePagination.querySelectorAll("[data-page]").forEach((button) => {
+                button.addEventListener("click", () => {
+                    const nextPage = Number.parseInt(button.dataset.page, 10);
+                    const clampedPage = Math.min(Math.max(nextPage, 0), pageCount - 1);
+                    renderArticlesPage(clampedPage);
+                });
+            });
+        }
+
+        function renderArticlesPage(pageIndex, replaceState = false) {
+            if (!Array.isArray(articleItems) || articleItems.length === 0) {
+                articleList.innerHTML = "<p>Khong co bai viet.</p>";
+                articlePagination.innerHTML = "";
+                return;
+            }
+
+            const pageCount = getArticlePageCount(articleItems);
+            const safePageIndex = Math.min(Math.max(pageIndex, 0), pageCount - 1);
+            const startIndex = safePageIndex * ARTICLE_PAGE_SIZE;
+            const pageItems = articleItems.slice(startIndex, startIndex + ARTICLE_PAGE_SIZE);
+
+            renderArticles(pageItems);
+            renderArticlePagination(safePageIndex, pageCount);
+            setArticlePageInUrl(safePageIndex, replaceState);
+        }
+
         renderHero(heroData);
-        renderArticles(articleItems);
+        renderArticlesPage(getArticlePageIndexFromUrl(), true);
+
+        window.addEventListener("popstate", () => {
+            renderArticlesPage(getArticlePageIndexFromUrl(), true);
+        });
     </script>
 </body>
 </html>
